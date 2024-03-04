@@ -1,0 +1,159 @@
+#tentative Xextan PEG grammar
+#Contributors: la Tsakap
+
+# text level  
+
+text <- _? ( _? sentence)*
+sentence <- illocution? _? (clause / fragment) _? &(illocution / end_of_input)
+
+# phrase/clause level
+
+binder_phrase <- _? binder _? (predicate / term) SS_terminator?
+tag_phrase <- _? !preposition_SS tag _? (predicate / term) SS_terminator?
+clause <- fragment? (predicate _? fragment?)+ 
+predicate <- _? trans? _? modifiers? _? (serial / verb) _? tag_phrase? _? SS_terminator? / trans? modifier _? (SS_terminator / illocution / end_of_input) / trans _? (tag_phrase / binder_phrase / modifier / term)? _? (SS_terminator / &(illocution / end_of_input))
+serial <- modifiers? _? verb (serial / _? modifiers? _? verb)+
+fragment <- (terms / adverbs)+
+terms <- ( _? term)+
+term <- modifiers? _? (case_marker_SS / preposition_SS / determiner_SS) _? adverbs? _? (modifiers? _? determiner_SS _?)* adverbs? _? (predicate / modifiers? pronoun) tag_phrase? _? SS_terminator?     /     modifiers? _? (case_marker_SS / preposition_SS / determiner_SS) _? adverbs? _? (modifiers? _? determiner_SS _?)* adverbs? _? (SS_terminator / &(illocution / end_of_input)) / modifiers? _? pronoun _? tag_phrase?
+adverbs <- ( _? modifiers? _? adverb)+
+modifiers <- ( _? modifier)+
+hesitations <- (_? hesitation)+
+
+# word level
+
+verb_H <- compound_H / root_H
+verb <- (compound / root !ANY_V / utility_predicate / freeword / verb_H) _? binder_phrase?
+compound_H <- root_H morpheme+ 
+compound <- root morpheme+ 
+morpheme <- root / suffix
+root_H <- C V_H F &(C / _ / end_of_input) / CL V_H &(C / _ / end_of_input)
+root <- C V F / CL V 
+freeword_start_1 <- C V FWF    /    C ANY_H V    /    (FWC / GL) ANY_H
+freeword_start_2 <- C ANY_H ANY_C V    /    ANY_H ANY_C V
+freeword_start_3 <- C ANY_H ANY_C V? ANY_H V?   /    (h / glottal)? ANY_H ANY_C V? ANY_H V?
+freeword <- (freeword_start_1 / freeword_start_3) (ANY_C / V? ANY_H V?)* (V / y) V? F?   /   freeword_start_2 (V / y)? F?
+suffix <- x o !V / k o !V / z i !V / s e !V / s i !V / trans_suffix
+trans_suffix <- f u !V
+pronoun <- !verb (n i e / n i o / t u i / b a !V / b i !V / t i !V / d i !V / d u !V / g i !V / g o !V / v i !V / v o !V / x e !V / l e !V / l i !V / n i !V)
+trans <- !verb ((h / glottal)? u / t u)
+case_marker_SS <- !verb (t u o / t u e / t u a / (h / glottal)? o i / (h / glottal)? e i / (h / glottal)? a i / t o i / t e i / t a i / (h / glottal)? o u / (h / glottal)? e u / (h / glottal)? a u / t o u / t e u / t a u / (h / glottal)? o !V / (h / glottal)? e !V / (h / glottal)? a !V / t o / t e / t a) 
+preposition_SS <- !verb (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f e !V / f i !V / f o !V / z a !V)
+determiner_SS <- !verb (b a u / possessive / numeral+ / p o !V / q i !V / q u !V / l a !V / l o !V / l u !V)
+possessive <- l i a / n i a / d u a / g u a / v u a 
+numeral <- !verb (d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u / n u e / n u !V / n e !V)
+illocution <- (h / glottal)? i !V / j a / j e / j i / j o / j u
+modifier <- !verb (f e i / s a i / s e i / s o i / b u !V / g a !V / g e !V / s o !V / n o !V)
+adverb <- !verb (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / w a / w e / w i / w o / w u / n a !V / x a !V / f a !V / p a !V)
+connective <- !verb (k a i / q a !V / q e !V / q o !V / z e !V)
+binder <- !verb (d o !V / d e !V / d a !V / p i !V)
+tag <- !verb (k i !V / k e !V / p e !V)
+utility_predicate <- b o !V / k a !V 
+SS_terminator <- g u !V
+
+# character level
+
+# All letters
+ANY <- C / V / FWC / V_H / V_HN / y / y_H / y_HN / ['] / GL
+# All consonants
+ANY_C <- C / FWC / GL / glottal
+# All vowels
+ANY_V <- V / V_H / V_HN / y / y_H / y_HN
+# All high tone
+ANY_H <- V_H / V_HN / y_H / y_HN
+# Consonants
+C <- p / b / t / d / k / g / f / v / s / z / x / q / l / n
+# Voiced consonants
+voiced <- b / d / g / v / z / q
+# Vowels
+V <- a / e / i / o / u
+# Finals
+F <- p / b &voiced / t / d &voiced / k / g &voiced / l / n
+# Glides
+GL <- j / w
+# B Root Initial Clusters
+CL <- z b / z d / z g / z l / z n / s p / s t / s k / s l / s n / q b / q d / q g / q l / q n / x p / x t / x k / x l / x n / b l / p l / g l / k l / v l / f l / d q / t x / d z / t s
+# Freeword-only consonants
+FWC <- h / m / r
+# Freeword finals
+FWF <- f / v / s / z / x / q / r
+# High marked vowels
+V_H <- a_H / e_H / i_H / o_H / u_H
+V_HN <- a_HN / e_HN / i_HN / o_HN / u_HN
+
+#case fixing of letters
+
+p <- [pP] #: LEAF
+b <- [bB] #: LEAF
+t <- [tT] #: LEAF
+d <- [dD] #: LEAF
+k <- [kK] #: LEAF
+g <- [gG] #: LEAF
+f <- [fF] #: LEAF
+v <- [vV] #: LEAF
+s <- [sS] #: LEAF
+z <- [zZ] #: LEAF
+x <- [xX] #: LEAF
+q <- [qQ] #: LEAF
+l <- [lL] #: LEAF
+n <- [nN] #: LEAF
+
+j <- [jJ] #: LEAF
+w <- [wW] #: LEAF
+
+m <- [mM] #: LEAF
+r <- [rR] #: LEAF
+h <- [hH] #: LEAF
+
+a <- [aA] #: LEAF
+e <- [eE] #: LEAF
+i <- [iI] #: LEAF
+o <- [oO] #: LEAF
+u <- [uU] #: LEAF
+y <- [yY] #: LEAF
+
+# High
+
+a_H <- [áÁ] #: LEAF
+e_H <- [éÉ] #: LEAF
+i_H <- [íÍ] #: LEAF
+o_H <- [óÓ] #: LEAF
+u_H <- [úÚ] #: LEAF
+y_H <- [ýÝ] #: LEAF
+
+# Low
+
+a_L <- [àÀ] #: LEAF
+e_L <- [èÈ] #: LEAF
+i_L <- [ìÌ] #: LEAF
+o_L <- [òÒ] #: LEAF
+u_L <- [ùÙ] #: LEAF
+y_L <- [ỳỲ] #: LEAF
+
+# Nasal
+
+a_N <- [äÄãÃ] #: LEAF
+e_N <- [ëËẽẼ] #: LEAF
+i_N <- [ïÏĩĨ] #: LEAF
+o_N <- [öÖõÕ] #: LEAF
+u_N <- [üÜũŨ] #: LEAF
+y_N <- [ÿŸỹỸ] #: LEAF
+
+# High Nasal
+
+a_HN <- [âÂ] #: LEAF
+e_HN <- [êÊ] #: LEAF
+i_HN <- [îÎ] #: LEAF
+o_HN <- [ôÔ] #: LEAF
+u_HN <- [ûÛ] #: LEAF
+y_HN <- [ŷŶ] #: LEAF
+
+hesitation <- y+
+
+_ <- ([ ,.?!'-()] / hesitation)+ / end_of_input
+
+quotation_mark <- [~"]+ #: LEAF
+
+glottal <- ['] #: LEAF
+
+end_of_input <- !.
