@@ -140,13 +140,13 @@ function newer_postprocessor(
     /* Building a map of node names to name replacements */
     var name_substitution_map = {
         "cmene": "C", "cmevla": "C", "gismu": "G", "lujvo": "L",
-        "fuhivla": "Z", "prenex": "PRENEX", "sentence": "BRIDI",
+        "fuhivla": "Z", "prenex": "PRENEX", "sentence": "sentence",
         "selbri": "SELBRI", "sumti": "SUMTI"
     };
     if (!with_trimming) name_substitution_map = {};
-    var special_selmaho = ["pronoun", "trans", "case_marker_SS", "preposition_SS", "determiner_SS", "binder", "tag",
+    var special_selmaho = ["pronoun", "transmogrifier", "case_marker_SS", "preposition_SS", "determiner_SS", "binder", "tag",
                            "illocution", "modifier", "adverb", "connective", "numeral", "freeword", "compound", "root",
-						   "utility_predicate", "SS_terminator", "root_H"];
+						   "utility_predicate", "SS_terminator", "root_H", "quoter"];
     /** Building a node_action_for() function from the selected options **/
     if (with_morphology)
          var is_flattening_target = function (tree) { return false; };
