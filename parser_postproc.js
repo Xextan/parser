@@ -144,9 +144,11 @@ function newer_postprocessor(
         "selbri": "SELBRI", "sumti": "SUMTI"
     };
     if (!with_trimming) name_substitution_map = {};
-    var special_selmaho = ["pronoun", "transmogrifier", "case_marker_SS", "preposition_SS", "determiner_SS", "binder", "tag",
-                           "illocution", "modifier", "adverb", "connective", "numeral", "freeword", "compound", "root",
-						   "utility_predicate", "SS_terminator", "root_H", "quoter"];
+    var special_selmaho = ["pronoun", "transmogrifier", "preposition_SS", "determiner_SS", "binder", "tag", "discursive_illocution",
+                           "modal_illocution", "modifier", "adverb", "connective", "numeral", "freeword", "compound", "root",
+						   "utility_predicate", "SS_terminator", "root_H", "quoter", "subject_marker_SS", "object_marker_SS",
+   						   "dative_marker_SS", "preposition_LS", "determiner_LS", "subject_marker_LS", "object_marker_LS",
+						   "dative_marker_SS", "tag_LS", "binder_LS", "LS_terminator"];
     /** Building a node_action_for() function from the selected options **/
     if (with_morphology)
          var is_flattening_target = function (tree) { return false; };
