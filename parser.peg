@@ -13,7 +13,7 @@ binder_phrase <- _? modifiers? binder _? (((predicate / noun_term / tag_phrase /
 tag_phrase <- _? modifiers? tag _? (((predicate / noun_term / tag_phrase / binder_phrase) _? SS_terminator?) / (SS_terminator / &(noun_term / transmogrifier / illocution / end_of_input)))    / _? modifiers? tag_LS _? clause _? (LS_terminator / &(illocution / end_of_input))
 clause <- fragment? (predicate_term fragment?)+ (_? connective _? clause)?
 predicate <- _? adverbs? modifiers? (serial / verb) tag_phrase? (_? connective _? predicate)?
-serial <- modifiers? _? verb ( _? serial / _? verb)+
+serial <- modifiers? _? verb ( _? serial / _? modifiers? verb)+
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term
