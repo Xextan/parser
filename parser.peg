@@ -70,7 +70,8 @@ illocution <- discursive_illocution / modal_illocution
 discursive_illocution <- (h / glottal)? i !V / j e / j u
 modal_illocution <- j a / j o / j i
 modifier <- !verb (f e i / s a i / s e i / s o i / b u !V / g a !V / g e !V / s o !V / n o !V)
-adverb <- !verb (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / w a / w e / w i / w o / w u / n a !V / x a !V / f a !V / p a !V)
+adverb <- !verb (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / w a / w e / w i / w o / w u / n a !V / x a !V / f a !V / p a !V) adverb_suffix?
+adverb_suffix <- (n i u / l u a / d e i)
 connective <- !verb (k a i / q a !V / q e !V / q o !V / z e !V)
 binder <- !verb (d o !V / d e !V / d a !V / p i !V)
 tag <- !verb (k i !V / k e !V / p e !V)
