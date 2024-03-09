@@ -1,54 +1,61 @@
 #tentative Xextan PEG grammar
-#Contributors: la Tsakap
+#Contributors: Filomena Rocca a.k.a. la Tsakap
 
 # text level  
 
-text <- _? ( _? sentence)*
-sentence <- illocutions? _? (clause / fragment) ( _? connective _? &illocution sentence)? &(illocution / end_of_input) / illocutions _? &(illocution / end_of_input)
+text <- _? ( _? discourse)*
+discourse <- ( _? sentence)+ _? VU_elidible ( _? connective _? discourse)?
+sentence <- (illocutions? (_? topic_phrase)? _? (clause / fragment) / illocutions) (( _? connective)? _? &illocution sentence)?
 
 # phrase/clause level
 
 illocutions <- (discursive_illocution _? modal_illocution) / (modal_illocution _? discursive_illocution) / illocution
-binder_phrase <- _? modifiers? binder _? (((predicate / noun_term / tag_phrase / binder_phrase) _? SS_terminator?) / (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input)))    / _? modifiers? binder_LS _? clause _? (LS_terminator / &(illocution / end_of_input))
-tag_phrase <- _? modifiers? tag _? (((predicate / noun_term / tag_phrase / binder_phrase) _? SS_terminator?) / (SS_terminator / &(noun_term / transmogrifier / illocution / end_of_input)))    / _? modifiers? tag_LS _? clause _? (LS_terminator / &(illocution / end_of_input))
+binder_phrase <- ( _? modifiers? binder _? adverbs? (predicate / noun_term / tag_phrase / binder_phrase)? _? GU_elidible / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?
+tag_phrase <- ( _? modifiers? tag _? adverbs? (predicate / noun_term / tag_phrase / binder_phrase)? _? GU_elidible / _? modifiers? tag_LS _? clause _? KU_elidible) ( _? connective _? tag_phrase)?
 clause <- fragment? (predicate_term fragment?)+ (_? connective _? clause)?
-predicate <- _? adverbs? modifiers? (serial / verb) tag_phrase? (_? connective _? predicate)?
+topic_phrase <- (clause / fragment)? _? topic_marker
+predicate <- (( _? modifiers? (serial / verb)) / _? modifiers)  tag_phrase? (_? connective _? predicate)?
 serial <- modifiers? _? verb ( _? serial / _? modifiers? verb)+
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
-noun_term <- subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term
-term_nucleus <- _? adverbs? _? (predicate / pronoun / quote / tag_phrase / binder_phrase / free_term / modifier) _? (tag_phrase / binder_phrase)? _? SS_terminator?
+noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
+term_nucleus <- _? adverbs? (predicate / (tag_phrase / binder_phrase)) _? GU_elidible
 
-predicate_term <- _? modifiers? transmogrifier _? _? adverbs? modifiers? (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input)) / _? modifiers? _?  transmogrifier?  term_nucleus (_? connective _? predicate_term)?
-subject_term <-  _? modifiers? (subject_marker_SS _? adverbs? modifiers? (term_nucleus / _? (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input))) / subject_marker_LS _? clause _? (LS_terminator / &(illocution / end_of_input))) ( _? connective _? subject_term)?
-object_term <-   _? modifiers?  (object_marker_SS _? adverbs? modifiers? (term_nucleus / _? (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input))) /  object_marker_LS _? clause _? (LS_terminator / &(illocution / end_of_input))) ( _? connective _? object_term)?
-dative_term <-   _? modifiers?  (dative_marker_SS _? adverbs? modifiers? (term_nucleus / _? (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input))) /  dative_marker_LS _? clause _? (LS_terminator / &(illocution / end_of_input))) ( _? connective _? dative_term)?
-preposition_term <-  _? modifiers?  (preposition_SS _? adverbs? modifiers? (term_nucleus / _? (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input))) /  preposition_LS _? clause _? (LS_terminator / &(illocution / end_of_input))) ( _? connective _? preposition_term)?
-free_term <- _? modifiers? (pronoun / quote /  determiner_SS _? (term_nucleus / _? (SS_terminator / &(case_marker / preposition / transmogrifier / illocution / end_of_input))) / determiner_LS _? clause _? (LS_terminator / &(illocution / end_of_input))) (_? connective _? free_term)?
-free_connective_term <- _? connective _? (subject_term / object_term / dative_term / preposition_term / free_term)
+predicate_term <- modifiers?    (transmogrifier _? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? pronoun (_? tag_phrase)? / term_nucleus / GU_elidible) / (transmogrifier?  _? term_nucleus)) _? (connective _? predicate_term)?
+subject_term <-   modifiers? (subject_marker_SS _? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? pronoun (_? tag_phrase)? / term_nucleus / GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _? subject_term)?
+object_term <-    modifiers? ( object_marker_SS _? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? pronoun (_? tag_phrase)? / term_nucleus / GU_elidible) /  object_marker_LS _? clause _? KU_elidible /  object_marker_SS _? &illocution discourse) _? (connective _?  object_term)?
+dative_term <-    modifiers? ( dative_marker_SS _? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? pronoun (_? tag_phrase)? / term_nucleus / GU_elidible) /  dative_marker_LS _? clause _? KU_elidible /  dative_marker_SS _? &illocution discourse) _? (connective _?  dative_term)?
+preposition_term <-  modifiers? (preposition_SS _? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? pronoun (_? tag_phrase)? / term_nucleus / GU_elidible) /    preposition_LS _? clause _? KU_elidible /    preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?
+free_term <-                      (modifiers? pronoun _? tag_phrase? / (determiner_SS _?)+ (modifiers? _? pronoun (_? tag_phrase)? / term_nucleus / GU_elidible) /     determiner_LS _? clause _? KU_elidible /     determiner_SS _? &illocution discourse) _? (connective _? free_term)?
+free_connective_term <- _? connective (subject_term / object_term / dative_term / preposition_term / free_term)
 
-adverbs <- (modifiers? adverb _? / modifiers (SS_terminator / &(noun_term / transmogrifier / illocution / end_of_input)))+
+adverbs <- (modifiers? adverb _? )+ / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)
 modifiers <- (modifier _?)+
-quote <- modifiers? _? quoter _? quotation_mark quoted_text quotation_mark
+quote <- modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?
 quoted_text <- (!quotation_mark . )+ #: LEAF
+
+GU_elidible <- SS_terminator / &(adverbs? (connective? _? illocution / connective? _? pronoun / connective? _? case_marker / connective? _? preposition / connective? _? determiner / connective? _? transmogrifier / _? topic_marker / LS_terminator / DS_terminator / end_of_input))
+KU_elidible <- LS_terminator / &(connective? _? illocution / DS_terminator / end_of_input)
+VU_elidible <- DS_terminator / &end_of_input
 
 # word level
 
 verb_H <- compound_H / root_H
-verb <- (compound / root !ANY_V / utility_predicate / freeword / verb_H) _? binder_phrase?
+verb <- (compound / root !ANY_V / utility_predicate / freeword / verb_H / numeral (numeral / superscript)* transmogrifier_suffix) _? binder_phrase?
 compound_H <- root_H morpheme+ 
 compound <- root morpheme+ 
 morpheme <- root / suffix
 root_H <- C V_H F &(C / _ / end_of_input) / CL V_H &(C / _ / end_of_input)
 root <- C V F / CL V 
 freeword_start <- ANY_C? r? (HD / ANY_H) &(ANY_C ANY_C? ANY_V)
-freeword <- freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) (F / r)?   /   C V &FWF CL V F root*   # freeword classic(TM)
+freeword <- freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F?   /   C V FWCL V F root*   # freeword classic(TM)
 suffix <- x o !V / k o !V / z i !V / s e !V / s i !V / transmogrifier_suffix
 transmogrifier_suffix <- f u !V
 pronoun <-  !verb (n i e / n i o / t u i / b a !V / b i !V / t i !V / d i !V / d u !V / g i !V / g o !V / v i !V / v o !V / x e !V / l e !V / l i !V / n i !V)
 transmogrifier <- !verb (h / glottal)? u !V
 case_marker <- case_marker_LS / case_marker_SS
 preposition <- preposition_LS / preposition_SS
+determiner <- determiner_LS / determiner_SS
 
 case_marker_LS <- subject_marker_LS / object_marker_LS / dative_marker_LS
 subject_marker_LS <- !verb (t u o_N / t o_N i / t o_N u / (h / glottal)? o_N i / (h / glottal)? o_N u / t o_N !V / (h / glottal)? o_N !V)
@@ -62,9 +69,9 @@ subject_marker_SS <- !verb (t u o / t o i / t o u / (h / glottal)? o i / (h / gl
 object_marker_SS <- !verb (t u e / t e i / t e u / (h / glottal)? e i / (h / glottal)? e u / t e !V / (h / glottal)? e !V)
 dative_marker_SS <- !verb (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !V / (h / glottal)? a !V)
 preposition_SS <- !verb (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f e !V / f i !V / f o !V / z a !V)
-determiner_SS <- !verb (b a u / possessive / (numeral/superscript)+ / p o !V / q i !V / q u !V / l a !V / l o !V / l u !V / t u !V)
+determiner_SS <- !verb (b a u / possessive / numeral (numeral / superscript)* / p o !V / q i !V / q u !V / l a !V / l o !V / l u !V / t u !V)
 possessive <- l i a / n i a / d u a / g u a / v u a 
-numeral <- !verb (d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u / n u e / n u !V / n e !V)
+numeral <- (d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u !V / n u e / n u !V / n e !V)
 
 illocution <- discursive_illocution / modal_illocution
 discursive_illocution <- (h / glottal)? i !V / j e / j u
@@ -80,8 +87,11 @@ tag_LS <- !verb (k i_N !V / k e_N !V / p e_N !V)
 utility_predicate <- b o !V / k a !V
 quoter <- (l o u / l a u) 
 superscript <- !verb x i !V
+topic_marker <- z o i
 SS_terminator <- !verb g u !V
 LS_terminator <- !verb k u !V
+DS_terminator <- !verb v u !V
+terminator <- SS_terminator / LS_terminator / DS_terminator
 
 # character level
 
@@ -97,6 +107,8 @@ ANY_H <- V_H / V_HN / y_H / y_HN
 C <- p / b / t / d / k / g / f / v / s / z / x / q / l / n
 # Voiced consonants
 voiced <- b / d / g / v / z / q
+# Unvoiced
+unvoiced <- p / t / k / f / s / x
 # Vowels
 V <- a / e / i / o / u
 # Glide vowels
@@ -109,8 +121,12 @@ GL <- j / w
 CL <- z b / z d / z g / z l / z n / s p / s t / s k / s l / s n / q b / q d / q g / q l / q n / x p / x t / x k / x l / x n / b l / p l / g l / k l / v l / f l / d q / t x / d z / t s
 # Freeword-only consonants
 FWC <- h / m / r
-# Freeword finals
+# Classic freeword finals
 FWF <- f / v / s / z / x / q / r
+# Classic freeword clusters
+FWCL <- !illegal_CL &(voiced voiced / unvoiced unvoiced / C (l / n)) FWF C
+# Illegal clusters
+illegal_CL <- x s / s x / z q / q z
 # High marked vowels
 V_H <- a_H / e_H / i_H / o_H / u_H
 # High nasal vowels
@@ -189,9 +205,11 @@ y_HN <- [ŷŶ] #: LEAF
 
 hesitation <- y+
 
-punctuation <- [,.?!'-()":;…]
+punctuation <- [,.:;?!…'"-(){}]
 
-_ <- ([ ] / hesitation / punctuation)+ / end_of_input
+new_line <- "\n"
+
+_ <- ([ ] / hesitation / punctuation / new_line)+ / end_of_input
 
 quotation_mark <- [~]+ #: LEAF
 
