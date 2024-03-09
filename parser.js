@@ -2215,6 +2215,9 @@ var parser = /*
                 }
                 if (s9 !== peg$FAILED) {
                   s10 = peg$parsepronoun();
+                  if (s10 === peg$FAILED) {
+                    s10 = peg$parsequote();
+                  }
                   if (s10 !== peg$FAILED) {
                     s11 = peg$currPos;
                     s12 = peg$parse_();
@@ -2489,6 +2492,9 @@ var parser = /*
                 }
                 if (s9 !== peg$FAILED) {
                   s10 = peg$parsepronoun();
+                  if (s10 === peg$FAILED) {
+                    s10 = peg$parsequote();
+                  }
                   if (s10 !== peg$FAILED) {
                     s11 = peg$currPos;
                     s12 = peg$parse_();
@@ -2816,6 +2822,9 @@ var parser = /*
                 }
                 if (s9 !== peg$FAILED) {
                   s10 = peg$parsepronoun();
+                  if (s10 === peg$FAILED) {
+                    s10 = peg$parsequote();
+                  }
                   if (s10 !== peg$FAILED) {
                     s11 = peg$currPos;
                     s12 = peg$parse_();
@@ -3143,6 +3152,9 @@ var parser = /*
                 }
                 if (s9 !== peg$FAILED) {
                   s10 = peg$parsepronoun();
+                  if (s10 === peg$FAILED) {
+                    s10 = peg$parsequote();
+                  }
                   if (s10 !== peg$FAILED) {
                     s11 = peg$currPos;
                     s12 = peg$parse_();
@@ -3470,6 +3482,9 @@ var parser = /*
                 }
                 if (s9 !== peg$FAILED) {
                   s10 = peg$parsepronoun();
+                  if (s10 === peg$FAILED) {
+                    s10 = peg$parsequote();
+                  }
                   if (s10 !== peg$FAILED) {
                     s11 = peg$currPos;
                     s12 = peg$parse_();
@@ -3702,6 +3717,9 @@ var parser = /*
       }
       if (s3 !== peg$FAILED) {
         s4 = peg$parsepronoun();
+        if (s4 === peg$FAILED) {
+          s4 = peg$parsequote();
+        }
         if (s4 !== peg$FAILED) {
           s5 = peg$parse_();
           if (s5 === peg$FAILED) {
@@ -3790,6 +3808,9 @@ var parser = /*
             }
             if (s6 !== peg$FAILED) {
               s7 = peg$parsepronoun();
+              if (s7 === peg$FAILED) {
+                s7 = peg$parsequote();
+              }
               if (s7 !== peg$FAILED) {
                 s8 = peg$currPos;
                 s9 = peg$parse_();
