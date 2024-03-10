@@ -148,7 +148,7 @@ function newer_postprocessor(
                            "modal_illocution", "modifier", "adverb", "connective", "numeral", "freeword", "compound", "root",
 						   "utility_predicate", "SS_terminator", "root_H", "quoter", "subject_marker_SS", "object_marker_SS",
    						   "dative_marker_SS", "preposition_LS", "determiner_LS", "subject_marker_LS", "object_marker_LS",
-						   "dative_marker_SS", "tag_LS", "binder_LS", "LS_terminator", "DS_terminator", "topic_marker"];
+						   "dative_marker_SS", "tag_LS", "binder_LS", "LS_terminator", "DS_terminator", "topic_marker", "illocution"];
     /** Building a node_action_for() function from the selected options **/
     if (with_morphology)
          var is_flattening_target = function (tree) { return false; };

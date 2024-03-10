@@ -5,7 +5,7 @@
 
 text <- _? ( _? discourse)*
 discourse <- ( _? sentence)+ _? VU_elidible ( _? connective _? discourse)?
-sentence <- (illocutions? (_? topic_phrase)? _? ((clause / fragment) (XU? _ )?)+  / illocutions _? &(illocution / end_of_input)) (( _? connective)? _? &illocution sentence)?
+sentence <- (illocutions? _? ((clause / fragment) (XU? _ )?)+  / illocutions _? &(illocution / end_of_input)) (( _? connective)? _? &illocution sentence)?
 
 # phrase/clause level
 
@@ -13,7 +13,6 @@ illocutions <- (discursive_illocution _? modal_illocution) / (modal_illocution _
 binder_phrase <- _? modifiers? binder _? adverbs? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? (pronoun / quote) (_? tag_phrase)? / term_nucleus / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible ( _? connective _? binder_phrase)?
 tag_phrase <-    _? modifiers? tag    _? adverbs? (adverbs? modifiers? determiner_SS _?)* (modifiers? _? (pronoun / quote) (_? tag_phrase)? / term_nucleus / GU_elidible) / _? modifiers? tag_LS    _? clause _? KU_elidible ( _? connective _? tag_phrase)?
 clause <- fragment? (predicate_term fragment?)+ (_? connective _? clause)?
-topic_phrase <- (clause / fragment)? _? topic_marker
 predicate <- (( _? modifiers? (serial / verb)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
 serial <- modifiers? _? verb ( _? serial / _? modifiers? verb)+
 fragment <- (noun_terms / adverbs)+
@@ -33,8 +32,8 @@ modifiers <- (modifier _?)+
 quote <- modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?
 quoted_text <- (!quotation_mark . )+ #: LEAF
 
-GU_elidible <- SS_terminator / &(adverbs? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? case_marker / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / _? topic_marker / LS_terminator / DS_terminator / ALL_terminator / end_of_input))
-KU_elidible <- LS_terminator / &(connective? _? illocution / DS_terminator / XU / end_of_input)
+GU_elidible <- SS_terminator / &(adverbs? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? case_marker / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / LS_terminator / DS_terminator / ALL_terminator / end_of_input))
+KU_elidible <- LS_terminator / &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)
 VU_elidible <- DS_terminator / &end_of_input
 XU          <- ALL_terminator
 
@@ -71,24 +70,23 @@ object_marker_SS <- !verb (t u e / t e i / t e u / (h / glottal)? e i / (h / glo
 dative_marker_SS <- !verb (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !V / (h / glottal)? a !V)
 preposition_SS <- !verb (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f e !V / f i !V / f o !V / z a !V)
 determiner_SS <- !verb (b a u / possessive / numeral (numeral / superscript)* / p o !V / q i !V / q u !V / l a !V / l o !V / l u !V / t u !V)
-possessive <- l i a / n i a / d u a / g u a / v u a 
+possessive <- l i a / n i a / d u a / g u a / v u a / x u a
 numeral <- (d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u !V / n u e / n u !V / n e !V)
 
-illocution <- discursive_illocution / modal_illocution
+illocution <- discursive_illocution / modal_illocution / z o i
 discursive_illocution <- (h / glottal)? i !V / j e / j u
 modal_illocution <- j a / j o / j i
 modifier <- !verb (f e i / s a i / s e i / s o i / b u !V / g a !V / g e !V / s o !V / n o !V)
 adverb <- !verb (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / w a / w e / w i / w o / w u / n a !V / x a !V / f a !V / p a !V) adverb_suffix?
 adverb_suffix <- (n i u / l u a / d e i)
 connective <- !verb (k a i / q a !V / q e !V / q o !V / z e !V)
-binder <- !verb (d o !V / d e !V / d a !V / p i !V)
+binder <- !verb (d o u / d o i / d e u / d e i / d a u / d a i / d o !V / d e !V / d a !V / p i !V)
 tag <- !verb (k i !V / k e !V / p e !V)
 binder_LS <- !verb (d o_N !V / d e_N !V / d a_N !V / p i_N !V)
 tag_LS <- !verb (k i_N !V / k e_N !V / p e_N !V)
 utility_predicate <- b o !V / k a !V
 quoter <- (l o u / l a u) 
 superscript <- !verb x i !V
-topic_marker <- z o i
 SS_terminator <- !verb g u !V
 LS_terminator <- !verb k u !V
 DS_terminator <- !verb v u !V
