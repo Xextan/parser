@@ -1,8 +1,8 @@
 The MIT License (MIT)
 
-Xextan parser, Copyright (c) 2024 Xextan dev team.
+PEG.js Xextan parser, Copyright (c) 2024 Xextan dev team.
 
-The Xextan parser is a derivative of Camxes.
+The PEG.js Xextan parser is a derivative of Camxes.
 
 Camxes, Copyright (c) 2014 lagleki, ilmen, Masato Hagiwara and other contributors.
 
