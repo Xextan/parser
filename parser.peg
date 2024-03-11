@@ -49,7 +49,7 @@ trans_verb <- ((numeral / operator) _? )+ transmogrifier_suffix
 morpheme <- root / suffix
 root_H <- C V_H F !ANY_V / CL V_H
 root_L <- C V_L F !ANY_V / CL V_L
-root <- C V F !ANY_V / CL V 
+root <- C V !root_H F !ANY_V / CL V 
 freeword_start <- ANY_C? r? (HD / ANY_H) &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V)
 freeword <- freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F?   /   C V FWCL V F root*   # freeword classic(TM)
 suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / transmogrifier_suffix
