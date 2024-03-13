@@ -19,11 +19,11 @@ fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
 term_nucleus <- _? adverbs? ((predicate / tag_phrase / binder_phrase) _? GU_elidible / free_term / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?)
-predicate_term <- _? modifiers?    (transmogrifier _? (term_nucleus / GU_elidible) / (U_elidible _? term_nucleus)) _? (connective _? predicate_term)?
-subject_term <-   _? modifiers? (subject_marker_SS _? (term_nucleus / GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _?     subject_term)?
-object_term <-    _? modifiers? ( object_marker_SS _? (term_nucleus / GU_elidible) /  object_marker_LS _? clause _? KU_elidible /  object_marker_SS _? &illocution discourse) _? (connective _?      object_term)?
-dative_term <-    _? modifiers? ( dative_marker_SS _? (term_nucleus / GU_elidible) /  dative_marker_LS _? clause _? KU_elidible /  dative_marker_SS _? &illocution discourse) _? (connective _?      dative_term)?
-preposition_term <-  _? modifiers? (preposition_SS _? (term_nucleus / GU_elidible) /    preposition_LS _? clause _? KU_elidible /    preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?
+predicate_term <- (_? modifiers?    transmogrifier _? (term_nucleus / modifiers? GU_elidible) / (U_elidible _? term_nucleus)) _? (connective _? predicate_term)?
+subject_term <-   _? modifiers? (subject_marker_SS _? (term_nucleus / modifiers? GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _?     subject_term)?
+object_term <-    _? modifiers? ( object_marker_SS _? (term_nucleus / modifiers? GU_elidible) /  object_marker_LS _? clause _? KU_elidible /  object_marker_SS _? &illocution discourse) _? (connective _?      object_term)?
+dative_term <-    _? modifiers? ( dative_marker_SS _? (term_nucleus / modifiers? GU_elidible) /  dative_marker_LS _? clause _? KU_elidible /  dative_marker_SS _? &illocution discourse) _? (connective _?      dative_term)?
+preposition_term <-  _? modifiers? (preposition_SS _? (term_nucleus / modifiers? GU_elidible) /    preposition_LS _? clause _? KU_elidible /    preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?
 free_term <-      _? modifiers? ((pronoun / quote) _? tag_phrase? / (determiner_SS _?)+ (term_nucleus / GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?
 free_connective_term <- _? connective _? (subject_term / object_term / dative_term / preposition_term / free_term)
 
