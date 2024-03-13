@@ -10,8 +10,8 @@ sentence <- (illocutions? _? ((clause / fragment) (XU? _ )?)+  / illocutions _? 
 # phrase/clause level
 
 illocutions <- (discursive_illocution _? modal_illocution) / (modal_illocution _? discursive_illocution) / illocution
-binder_phrase <- _? modifiers? binder _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible ( _? connective _? binder_phrase)?
-tag_phrase <-    _? modifiers? tag    _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / GU_elidible) / _? modifiers? tag_LS    _? clause _? KU_elidible ( _? connective _? tag_phrase)?
+binder_phrase <- _? modifiers? binder _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible ( _? connective _? binder_phrase)?
+tag_phrase <-    _? modifiers? tag    _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS    _? clause _? KU_elidible ( _? connective _? tag_phrase)?
 clause <- fragment? (predicate_term fragment?)+ (_? connective _? clause)?
 predicate <- (( _? modifiers? (serial / verb)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
 serial <- modifiers? _? verb ( _? serial / _? modifiers? verb)+
@@ -19,7 +19,7 @@ fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
 term_nucleus <- _? adverbs? ((predicate / tag_phrase / binder_phrase) _? GU_elidible / free_term / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?)
-predicate_term <- _? modifiers?    (transmogrifier _? (term_nucleus / GU_elidible) / (transmogrifier?  _? term_nucleus)) _? (connective _? predicate_term)?
+predicate_term <- _? modifiers?    (transmogrifier _? (term_nucleus / GU_elidible) / (U_elidible _? term_nucleus)) _? (connective _? predicate_term)?
 subject_term <-   _? modifiers? (subject_marker_SS _? (term_nucleus / GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _?     subject_term)?
 object_term <-    _? modifiers? ( object_marker_SS _? (term_nucleus / GU_elidible) /  object_marker_LS _? clause _? KU_elidible /  object_marker_SS _? &illocution discourse) _? (connective _?      object_term)?
 dative_term <-    _? modifiers? ( dative_marker_SS _? (term_nucleus / GU_elidible) /  dative_marker_LS _? clause _? KU_elidible /  dative_marker_SS _? &illocution discourse) _? (connective _?      dative_term)?
@@ -32,6 +32,7 @@ modifiers <- (modifier _?)+
 quote <- modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?
 quoted_text <- (!quotation_mark . )+ #: LEAF
 
+U_elidible  <- &( _? term_nucleus)
 GU_elidible <- SS_terminator / &(adverbs? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? case_marker / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / LS_terminator / DS_terminator / ALL_terminator / end_of_input))
 KU_elidible <- LS_terminator / &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)
 VU_elidible <- DS_terminator / &end_of_input
@@ -47,10 +48,10 @@ compound_L <- root_L morpheme+
 compound <- root morpheme+ 
 trans_verb <- ((numeral / operator) _? )+ transmogrifier_suffix
 morpheme <- root / suffix glottal?
+root <- C V !root_H F !ANY_V / CL V 
 root_H <- C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))
 root_L <- C V_L F !ANY_V / CL V_L
-root <- C V !root_H F !ANY_V / CL V 
-freeword_start <- ANY_C? r? (HD / ANY_H) &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V)
+freeword_start <- (FWC / ANY_C FWC) (HD / ANY_H) &(ANY_C ANY_C? ANY_V)  /  ANY_C ANY_H &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V)  /  glottal? (HD / ANY_H) &(ANY_C ANY_V / ANY_C ANY_C ANY_V) / ANY_C HD &(ANY_C ANY_V / ANY_C ANY_C ANY_V)
 classic_freeword <- C (V / V_H) FWCL V F root*
 freeword <- freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F?   /   classic_freeword     # freeword classic(TM)
 suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / transmogrifier_suffix

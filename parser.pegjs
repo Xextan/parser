@@ -198,8 +198,8 @@ sentence = expr:((illocutions? _? ((clause / fragment) (XU? _ )?)+ / illocutions
 // phrase/clause level
 
 illocutions = expr:((discursive_illocution _? modal_illocution) / (modal_illocution _? discursive_illocution) / illocution) {return _node("illocutions", expr);}
-binder_phrase = expr:(_? modifiers? binder _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible ( _? connective _? binder_phrase)?) {return _node("binder_phrase", expr);}
-tag_phrase = expr:(_? modifiers? tag _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / GU_elidible) / _? modifiers? tag_LS _? clause _? KU_elidible ( _? connective _? tag_phrase)?) {return _node("tag_phrase", expr);}
+binder_phrase = expr:(_? modifiers? binder _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible ( _? connective _? binder_phrase)?) {return _node("binder_phrase", expr);}
+tag_phrase = expr:(_? modifiers? tag _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS _? clause _? KU_elidible ( _? connective _? tag_phrase)?) {return _node("tag_phrase", expr);}
 clause = expr:(fragment? (predicate_term fragment?)+ (_? connective _? clause)?) {return _node("clause", expr);}
 predicate = expr:((( _? modifiers? (serial / verb)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?) {return _node("predicate", expr);}
 serial = expr:(modifiers? _? verb ( _? serial / _? modifiers? verb)+) {return _node("serial", expr);}
@@ -207,7 +207,7 @@ fragment = expr:((noun_terms / adverbs)+) {return _node("fragment", expr);}
 noun_terms = expr:((noun_term _?)+) {return _node("noun_terms", expr);}
 noun_term = expr:((subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)) {return _node("noun_term", expr);}
 term_nucleus = expr:(_? adverbs? ((predicate / tag_phrase / binder_phrase) _? GU_elidible / free_term / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?)) {return _node("term_nucleus", expr);}
-predicate_term = expr:(_? modifiers? (transmogrifier _? (term_nucleus / GU_elidible) / (transmogrifier? _? term_nucleus)) _? (connective _? predicate_term)?) {return _node("predicate_term", expr);}
+predicate_term = expr:(_? modifiers? (transmogrifier _? (term_nucleus / GU_elidible) / (U_elidible _? term_nucleus)) _? (connective _? predicate_term)?) {return _node("predicate_term", expr);}
 subject_term = expr:(_? modifiers? (subject_marker_SS _? (term_nucleus / GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _? subject_term)?) {return _node("subject_term", expr);}
 object_term = expr:(_? modifiers? ( object_marker_SS _? (term_nucleus / GU_elidible) / object_marker_LS _? clause _? KU_elidible / object_marker_SS _? &illocution discourse) _? (connective _? object_term)?) {return _node("object_term", expr);}
 dative_term = expr:(_? modifiers? ( dative_marker_SS _? (term_nucleus / GU_elidible) / dative_marker_LS _? clause _? KU_elidible / dative_marker_SS _? &illocution discourse) _? (connective _? dative_term)?) {return _node("dative_term", expr);}
@@ -220,6 +220,7 @@ modifiers = expr:((modifier _?)+) {return _node("modifiers", expr);}
 quote = expr:(modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?) {return _node("quote", expr);}
 quoted_text = expr:((!quotation_mark . )+) {return ["quoted_text", _join(expr)];}
 
+U_elidible = expr:(&( _? term_nucleus)) {return (expr === "" || !expr) ? ["U"] : _node_empty("U_elidible", expr);}
 GU_elidible = expr:(SS_terminator / &(adverbs? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? case_marker / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / LS_terminator / DS_terminator / ALL_terminator / end_of_input))) {return (expr === "" || !expr) ? ["GU"] : _node_empty("GU_elidible", expr);}
 KU_elidible = expr:(LS_terminator / &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)) {return (expr === "" || !expr) ? ["KU"] : _node_empty("KU_elidible", expr);}
 VU_elidible = expr:(DS_terminator / &end_of_input) {return (expr === "" || !expr) ? ["VU"] : _node_empty("VU_elidible", expr);}
@@ -235,10 +236,10 @@ compound_L = expr:(root_L morpheme+) {return _node("compound_L", expr);}
 compound = expr:(root morpheme+) {return _node("compound", expr);}
 trans_verb = expr:(((numeral / operator) _? )+ transmogrifier_suffix) {return _node("trans_verb", expr);}
 morpheme = expr:(root / suffix glottal?) {return _node("morpheme", expr);}
+root = expr:(C V !root_H F !ANY_V / CL V) {return _node("root", expr);}
 root_H = expr:(C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))) {return _node("root_H", expr);}
 root_L = expr:(C V_L F !ANY_V / CL V_L) {return _node("root_L", expr);}
-root = expr:(C V !root_H F !ANY_V / CL V) {return _node("root", expr);}
-freeword_start = expr:(ANY_C? r? (HD / ANY_H) &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V)) {return _node("freeword_start", expr);}
+freeword_start = expr:((FWC / ANY_C FWC) (HD / ANY_H) &(ANY_C ANY_C? ANY_V) / ANY_C ANY_H &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V) / glottal? (HD / ANY_H) &(ANY_C ANY_V / ANY_C ANY_C ANY_V) / ANY_C HD &(ANY_C ANY_V / ANY_C ANY_C ANY_V)) {return _node("freeword_start", expr);}
 classic_freeword = expr:(C (V / V_H) FWCL V F root*) {return _node("classic_freeword", expr);}
 freeword = expr:(freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F? / classic_freeword) {return _node("freeword", expr);} // freeword classic(TM)
 suffix = expr:(x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / transmogrifier_suffix) {return _node("suffix", expr);}
