@@ -193,20 +193,20 @@
 
 text = expr:(_? ( _? discourse)*) {return _node("text", expr);}
 discourse = expr:(( _? sentence)+ _? VU_elidible ( _? connective _? discourse)?) {return _node("discourse", expr);}
-sentence = expr:((illocutions? _? ((clause / fragment) (XU? _ )?)+ / illocutions _? &(illocution / end_of_input)) (( _? connective)? _? &illocution sentence)?) {return _node("sentence", expr);}
+sentence = expr:((illocutions? _? ((clause / fragment) (_? XU _? )?)+ / illocutions _? &(illocution / end_of_input)) (( _? connective)? _? &illocution sentence)?) {return _node("sentence", expr);}
 
 // phrase/clause level
 
 illocutions = expr:((discursive_illocution _? modal_illocution) / (modal_illocution _? discursive_illocution) / illocution) {return _node("illocutions", expr);}
-binder_phrase = expr:(( _? modifiers? binder _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?) {return _node("binder_phrase", expr);}
-tag_phrase = expr:(( _? modifiers? tag _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS _? clause _? KU_elidible) ( _? connective _? tag_phrase)?) {return _node("tag_phrase", expr);}
+binder_phrase = expr:(( _? modifiers? binder_SS _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?) {return _node("binder_phrase", expr);}
+tag_phrase = expr:(( _? modifiers? tag_SS _? adverbs? (adverbs? modifiers? determiner_SS _?)* (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS _? clause _? KU_elidible) ( _? connective _? tag_phrase)?) {return _node("tag_phrase", expr);}
 clause = expr:(fragment? (predicate_term fragment?)+ (_? connective _? clause)?) {return _node("clause", expr);}
 predicate = expr:((( _? modifiers? (serial / verb)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?) {return _node("predicate", expr);}
 serial = expr:(modifiers? _? verb ( _? serial / _? modifiers? verb)+) {return _node("serial", expr);}
 fragment = expr:((noun_terms / adverbs)+) {return _node("fragment", expr);}
 noun_terms = expr:((noun_term _?)+) {return _node("noun_terms", expr);}
 noun_term = expr:((subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)) {return _node("noun_term", expr);}
-term_nucleus = expr:(_? adverbs? ((predicate / tag_phrase / binder_phrase) _? GU_elidible / free_term / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?)) {return _node("term_nucleus", expr);}
+term_nucleus = expr:(_? adverbs? ((predicate / tag_phrase / binder_phrase) _? GU_elidible (_? tag_phrase)? / free_term (_? tag_phrase)? / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?)) {return _node("term_nucleus", expr);}
 predicate_term = expr:((_? modifiers? transmogrifier _? (term_nucleus / modifiers? GU_elidible) / (U_elidible _? term_nucleus)) _? (connective _? predicate_term)?) {return _node("predicate_term", expr);}
 subject_term = expr:(_? modifiers? (subject_marker_SS _? (term_nucleus / modifiers? GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _? subject_term)?) {return _node("subject_term", expr);}
 object_term = expr:(_? modifiers? ( object_marker_SS _? (term_nucleus / modifiers? GU_elidible) / object_marker_LS _? clause _? KU_elidible / object_marker_SS _? &illocution discourse) _? (connective _? object_term)?) {return _node("object_term", expr);}
@@ -221,8 +221,8 @@ quote = expr:(modifiers? _? quoter _? quotation_mark quoted_text quotation_mark 
 quoted_text = expr:((!quotation_mark . )+) {return ["quoted_text", _join(expr)];}
 
 U_elidible = expr:(&( _? term_nucleus)) {return (expr === "" || !expr) ? ["U"] : _node_empty("U_elidible", expr);}
-GU_elidible = expr:(SS_terminator / &(adverbs? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? case_marker / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / connective _? (tag / binder) / LS_terminator / DS_terminator / ALL_terminator / end_of_input))) {return (expr === "" || !expr) ? ["GU"] : _node_empty("GU_elidible", expr);}
-KU_elidible = expr:(LS_terminator / &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)) {return (expr === "" || !expr) ? ["KU"] : _node_empty("KU_elidible", expr);}
+GU_elidible = expr:(SS_terminator (_? tag_phrase)? / &(adverbs? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? case_marker / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / connective _? (tag / binder) / LS_terminator / DS_terminator / ALL_terminator / end_of_input))) {return (expr === "" || !expr) ? ["GU"] : _node_empty("GU_elidible", expr);}
+KU_elidible = expr:(LS_terminator (_? tag_phrase)? / &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)) {return (expr === "" || !expr) ? ["KU"] : _node_empty("KU_elidible", expr);}
 VU_elidible = expr:(DS_terminator / &end_of_input) {return (expr === "" || !expr) ? ["VU"] : _node_empty("VU_elidible", expr);}
 XU = expr:(ALL_terminator) {return _node("XU", expr);}
 
@@ -249,6 +249,8 @@ transmogrifier = expr:(!(root / freeword) (h / glottal)? u !ANY_V) {return _node
 case_marker = expr:(case_marker_LS / case_marker_SS) {return _node("case_marker", expr);}
 preposition = expr:(preposition_LS / preposition_SS) {return _node("preposition", expr);}
 determiner = expr:(determiner_LS / determiner_SS) {return _node("determiner", expr);}
+tag = expr:(tag_SS / tag_LS) {return _node("tag", expr);}
+binder = expr:(binder_SS / binder_LS) {return _node("binder", expr);}
 
 case_marker_LS = expr:(subject_marker_LS / object_marker_LS / dative_marker_LS) {return _node("case_marker_LS", expr);}
 subject_marker_LS = expr:(!(root / freeword) (t u o_N / t o_N i / t o_N u / (h / glottal)? o_N i / (h / glottal)? o_N u / t o_N !ANY_V / (h / glottal)? o_N !ANY_V)) {return _node("subject_marker_LS", expr);}
@@ -273,13 +275,14 @@ modifier = expr:(!(root / freeword) (f e i / s a i / s e i / s o i / b u !ANY_V 
 adverb = expr:(!(root / freeword) (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / w a / w e / w i / w o / w u / n a !ANY_V / x a !ANY_V / f a !ANY_V / p a !ANY_V) adverb_suffix?) {return _node("adverb", expr);}
 adverb_suffix = expr:((n i u / l u a / d e i)) {return _node("adverb_suffix", expr);}
 connective = expr:(!(root / freeword) (k a i / q a !ANY_V / q e !ANY_V / q o !ANY_V / z e !ANY_V)) {return _node("connective", expr);}
-binder = expr:(!(root / freeword) (d o u / d o i / d e u / d e i / d a u / d a i / d o !ANY_V / d e !ANY_V / d a !ANY_V / p i !ANY_V)) {return _node("binder", expr);}
-tag = expr:(!(root / freeword) (k i !ANY_V / k e !ANY_V / p e !ANY_V)) {return _node("tag", expr);}
+binder_SS = expr:(!(root / freeword) (d o u / d o i / d e u / d e i / d a u / d a i / d o !ANY_V / d e !ANY_V / d a !ANY_V / p i !ANY_V)) {return _node("binder_SS", expr);}
+tag_SS = expr:(!(root / freeword) (k i !ANY_V / k e !ANY_V / p e !ANY_V)) {return _node("tag_SS", expr);}
 binder_LS = expr:(!(root / freeword) (d o_N !ANY_V / d e_N !ANY_V / d a_N !ANY_V / p i_N !ANY_V)) {return _node("binder_LS", expr);}
 tag_LS = expr:(!(root / freeword) (k i_N !ANY_V / k e_N !ANY_V / p e_N !ANY_V)) {return _node("tag_LS", expr);}
 utility_predicate = expr:(b o !ANY_V / k a !ANY_V) {return _node("utility_predicate", expr);}
 quoter = expr:((l o u / l a u)) {return _node("quoter", expr);}
 operator = expr:(!(root / freeword) (x i !ANY_V / p u !ANY_V)) {return _node("operator", expr);}
+
 SS_terminator = expr:(!(root / freeword) g u !ANY_V) {return _node("SS_terminator", expr);}
 LS_terminator = expr:(!(root / freeword) k u !ANY_V) {return _node("LS_terminator", expr);}
 DS_terminator = expr:(!(root / freeword) v u !ANY_V) {return _node("DS_terminator", expr);}
