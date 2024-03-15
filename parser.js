@@ -11978,9 +11978,9 @@ var parser = /*
           s1 = peg$currPos;
           s2 = peg$parsed();
           if (s2 !== peg$FAILED) {
-            s3 = peg$parsee();
+            s3 = peg$parsei();
             if (s3 !== peg$FAILED) {
-              s4 = peg$parsei();
+              s4 = peg$parsee();
               if (s4 !== peg$FAILED) {
                 s2 = [s2, s3, s4];
                 s1 = s2;
