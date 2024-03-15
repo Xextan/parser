@@ -215,7 +215,7 @@ preposition_term = expr:(_? modifiers? (preposition_SS _? (term_nucleus / modifi
 free_term = expr:(_? modifiers? ((pronoun / quote) _? tag_phrase? / (determiner_SS _?)+ (term_nucleus / GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?) {return _node("free_term", expr);}
 free_connective_term = expr:(_? connective _? (subject_term / object_term / dative_term / preposition_term / free_term)) {return _node("free_connective_term", expr);}
 
-adverbs = expr:((modifiers? adverb _? )+ / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)) {return _node("adverbs", expr);}
+adverbs = expr:((modifiers? adverb (_? connective _? adverb)? _? )+ / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)) {return _node("adverbs", expr);}
 modifiers = expr:((modifier _?)+) {return _node("modifiers", expr);}
 quote = expr:(modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?) {return _node("quote", expr);}
 quoted_text = expr:((!quotation_mark . )+) {return ["quoted_text", _join(expr)];}
@@ -234,7 +234,7 @@ verb = expr:((compound / root / utility_predicate / freeword / verb_H / trans_ve
 compound_H = expr:(root_H morpheme+) {return _node("compound_H", expr);}
 compound_L = expr:(root_L morpheme+) {return _node("compound_L", expr);}
 compound = expr:(root morpheme+) {return _node("compound", expr);}
-trans_verb = expr:(((numeral / operator) _? )+ transmogrifier_suffix) {return _node("trans_verb", expr);}
+trans_verb = expr:((((numeral / operator) _? )+ / possessive) transmogrifier_suffix) {return _node("trans_verb", expr);}
 morpheme = expr:(root / suffix glottal?) {return _node("morpheme", expr);}
 root = expr:(C V !root_H F !ANY_V / CL V) {return _node("root", expr);}
 root_H = expr:(C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))) {return _node("root_H", expr);}

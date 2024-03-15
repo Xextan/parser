@@ -27,7 +27,7 @@ preposition_term <-  _? modifiers? (preposition_SS _? (term_nucleus / modifiers?
 free_term <-      _? modifiers? ((pronoun / quote) _? tag_phrase? / (determiner_SS _?)+ (term_nucleus / GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?
 free_connective_term <- _? connective _? (subject_term / object_term / dative_term / preposition_term / free_term)
 
-adverbs <- (modifiers? adverb _? )+ / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)
+adverbs <- (modifiers? adverb (_? connective _? adverb)? _? )+ / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)
 modifiers <- (modifier _?)+
 quote <- modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?
 quoted_text <- (!quotation_mark . )+ #: LEAF
@@ -46,7 +46,7 @@ verb <- (compound / root / utility_predicate / freeword / verb_H / trans_verb) _
 compound_H <- root_H morpheme+ 
 compound_L <- root_L morpheme+ 
 compound <- root morpheme+ 
-trans_verb <- ((numeral / operator) _? )+ transmogrifier_suffix
+trans_verb <- (((numeral / operator) _? )+ / possessive) transmogrifier_suffix
 morpheme <- root / suffix glottal?
 root <- C V !root_H F !ANY_V / CL V 
 root_H <- C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))
