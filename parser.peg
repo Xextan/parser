@@ -46,7 +46,7 @@ verb <- (compound / root / utility_predicate / freeword / verb_H / trans_verb) _
 compound_H <- root_H morpheme+ 
 compound_L <- root_L morpheme+ 
 compound <- root morpheme+ 
-trans_verb <- (((numeral / operator) _? )+ / possessive) transmogrifier_suffix
+trans_verb <- (((numeral / operator) _? )+ / possessive) suffix
 morpheme <- root / suffix glottal?
 root <- C V !root_H F !ANY_V / CL V 
 root_H <- C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))
@@ -54,8 +54,7 @@ root_L <- C V_L F !ANY_V / CL V_L
 freeword_start <- (FWC / ANY_C FWC / GL) (HD / ANY_H) &(ANY_C ANY_C? ANY_V)  /  ANY_C ANY_H &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V)  /  glottal? (HD / ANY_H) &(ANY_C ANY_V / ANY_C ANY_C ANY_V) / ANY_C HD &(ANY_C ANY_V / ANY_C ANY_C ANY_V)
 classic_freeword <- C (V / V_H) FWCL V F root*
 freeword <- freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F?   /   classic_freeword     # freeword classic(TM)
-suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / transmogrifier_suffix
-transmogrifier_suffix <- f u !ANY_V
+suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V
 pronoun <-  !(root / freeword) (n i e / n i o / t u i / b a !ANY_V / b i !ANY_V / t i !ANY_V / d i !ANY_V / d u !ANY_V / g i !ANY_V / g o !ANY_V / v i !ANY_V / v o !ANY_V / x e !ANY_V / l e !ANY_V / l i !ANY_V / n i !ANY_V)
 transmogrifier <- !(root / freeword) (h / glottal)? u !ANY_V
 case_marker <- case_marker_LS / case_marker_SS
@@ -76,9 +75,9 @@ subject_marker_SS <- !(root / freeword) (t u o / t o i / t o u / (h / glottal)? 
 object_marker_SS <- !(root / freeword) (t u e / t e i / t e u / (h / glottal)? e i / (h / glottal)? e u / t e !ANY_V / (h / glottal)? e !ANY_V)
 dative_marker_SS <- !(root / freeword) (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !ANY_V / (h / glottal)? a !ANY_V)
 preposition_SS <- !(root / freeword) (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f e !ANY_V / f i !ANY_V / f o !ANY_V / z a !ANY_V)
-determiner_SS <- !(root / freeword) (b a u / possessive / ((numeral / operator) _? )+ / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)
+determiner_SS <- !(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)
 possessive <- l i a / n i a / d u a / g u a / v u a / x u a
-numeral <- (d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u !ANY_V / n u e / n u !ANY_V / n e !ANY_V)
+numeral <- (s a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u !ANY_V / n u e / n u !ANY_V / n e !ANY_V)
 
 illocution <- discursive_illocution / modal_illocution / z o i / q a i / q e i / q o i
 discursive_illocution <- (h / glottal)? i !ANY_V / j e / j u
