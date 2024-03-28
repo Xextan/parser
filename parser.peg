@@ -5,7 +5,7 @@
 
 text <- _? ( _? discourse)*
 discourse <- ( _? sentence)+ _? VU_elidible ( _? connective _? discourse)?
-sentence <- (illocutions? _? (fragment (XU _?)? / clause) / illocutions _? &(illocution / end_of_input / DS_terminator)) ( _? connective _? &illocution sentence)?
+sentence <- (illocutions? _? (clause / (fragment (XU _?)?)+) / illocutions _? &(illocution / end_of_input / DS_terminator)) ( _? connective _? &illocution sentence)?
 
 # phrase/clause level
 
