@@ -193,7 +193,7 @@
 
 text = expr:(_? ( _? discourse)*) {return _node("text", expr);}
 discourse = expr:(( _? sentence)+ _? VU_elidible ( _? connective _? discourse)?) {return _node("discourse", expr);}
-sentence = expr:((illocutions? _? (clause / (fragment (XU _?)?)+) / illocutions _? &(illocution / end_of_input / DS_terminator)) ( _? connective _? &illocution sentence)?) {return _node("sentence", expr);}
+sentence = expr:((illocutions? _? (clause (XU _?)? / fragment (XU _?)?)+ / illocutions _? &(illocution / end_of_input / DS_terminator)) ( _? connective _? &illocution sentence)?) {return _node("sentence", expr);}
 
 // phrase/clause level
 
