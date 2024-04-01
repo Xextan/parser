@@ -201,8 +201,9 @@ illocutions = expr:((discursive_illocution _? modal_illocution) / (modal_illocut
 binder_phrase = expr:(( _? modifiers? binder_SS _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?) {return _node("binder_phrase", expr);}
 tag_phrase = expr:(( _? modifiers? tag_SS _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS _? clause _? KU_elidible) ( _? connective _? tag_phrase)?) {return _node("tag_phrase", expr);}
 clause = expr:((fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?) {return _node("clause", expr);}
-predicate = expr:((( _? modifiers? (serial / verb)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?) {return _node("predicate", expr);}
-serial = expr:(modifiers? _? verb (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verb (binder_phrase / tag_phrase)?)+) {return _node("serial", expr);}
+predicate = expr:((( _? modifiers? (serial / verbal)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?) {return _node("predicate", expr);}
+serial = expr:(modifiers? _? verbal (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verbal (binder_phrase / tag_phrase)?)+) {return _node("serial", expr);}
+verbal = expr:(verb _? (connective _? verbal _? GU_elidible)?) {return _node("verbal", expr);}
 fragment = expr:((noun_terms / adverbs)+) {return _node("fragment", expr);}
 noun_terms = expr:((noun_term _?)+) {return _node("noun_terms", expr);}
 noun_term = expr:((subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)) {return _node("noun_term", expr);}
@@ -240,9 +241,11 @@ morpheme = expr:(root / suffix glottal?) {return _node("morpheme", expr);}
 root = expr:(C V !root_H F !ANY_V / CL V) {return _node("root", expr);}
 root_H = expr:(C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))) {return _node("root_H", expr);}
 root_L = expr:(C V_L F !ANY_V / CL V_L) {return _node("root_L", expr);}
-freeword_start = expr:((FWC / ANY_C FWC / GL) (HD / ANY_H) &(ANY_C ANY_C? ANY_V) / ANY_C ANY_H &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V) / glottal? (HD / ANY_H) &(ANY_C ANY_V / ANY_C ANY_C ANY_V) / ANY_C HD &(ANY_C ANY_V / ANY_C ANY_C ANY_V)) {return _node("freeword_start", expr);}
+
+freeword_start = expr:((FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C ANY_H &((!F CL3 / FWCL / sibilant m / ANY_C) ANY_V) / glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)) {return _node("freeword_start", expr);}
 classic_freeword = expr:(C (V / V_H) FWCL V F root*) {return _node("classic_freeword", expr);}
-freeword = expr:(freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F? / classic_freeword) {return _node("freeword", expr);} // freeword classic(TM)
+freeword = expr:(freeword_start ((CL3 / FWCL / CL / F C / ANY_C) (HD / ANY_H))* (CL3 / FWCL / CL / F C / sibilant m / ANY_C) (D / V / y) F? / classic_freeword) {return _node("freeword", expr);} // freeword classic(TM)
+
 suffix = expr:(x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V) {return _node("suffix", expr);}
 pronoun = expr:(!(root / freeword) (n i e / n i o / t u i / b a !ANY_V / b i !ANY_V / t i !ANY_V / d i !ANY_V / d u !ANY_V / g i !ANY_V / g o !ANY_V / v i !ANY_V / v o !ANY_V / x e !ANY_V / l e !ANY_V / l i !ANY_V / n i !ANY_V)) {return _node("pronoun", expr);}
 transmogrifier = expr:(!(root / freeword) (h / glottal)? u !ANY_V) {return _node("transmogrifier", expr);}
@@ -296,9 +299,9 @@ terminator = expr:(SS_terminator / LS_terminator / DS_terminator) {return _node(
 // All letters
 ANY = expr:(C / V / FWC / V_H / V_N / V_HN / y / y_H / y_HN / ['] / GL) {return _node("ANY", expr);}
 // All consonants
-ANY_C = expr:(C / FWC / GL / glottal) {return _node("ANY_C", expr);}
+ANY_C = expr:(C / FWC / GL / glottal / r) {return _node("ANY_C", expr);}
 // All vowels
-ANY_V = expr:(V / V_H / V_N / V_HN / y / y_H / y_HN) {return _node("ANY_V", expr);}
+ANY_V = expr:(V / V_H / V_N / V_HN / y / y_H / y_HN / r) {return _node("ANY_V", expr);}
 // All high tone
 ANY_H = expr:(V_H / V_HN / y_H / y_HN) {return _node("ANY_H", expr);}
 // Consonants
@@ -307,24 +310,44 @@ C = expr:(p / b / t / d / k / g / f / v / s / z / x / q / l / n) {return _node("
 voiced = expr:(b / d / g / v / z / q) {return _node("voiced", expr);}
 // Unvoiced
 unvoiced = expr:(p / t / k / f / s / x) {return _node("unvoiced", expr);}
+//Sibilant
+sibilant = expr:(s / x / z / q) {return _node("sibilant", expr);}
+//Other fricative
+fricative = expr:(f / v) {return _node("fricative", expr);}
+//Stop
+stop = expr:(p / t / k / b / d / g) {return _node("stop", expr);}
+//Sonorant
+sonorant = expr:(l / n) {return _node("sonorant", expr);}
 // Vowels
 V = expr:(a / e / i / o / u) {return _node("V", expr);}
-// Glide vowels
-GV = expr:(u / i) {return _node("GV", expr);}
+//Glides off i
+IG = expr:(a / e / o / u) {return _node("IG", expr);}
+//Glides off u
+UG = expr:(a / e / i / o) {return _node("UG", expr);}
+//Glides into i/u
+GV = expr:(a / e / o) {return _node("GV", expr);}
+//Glides off i, high
+IG_H = expr:((a_H / a_HN) / (e_H / e_HN) / (o_H / o_HN) / (u_H / u_HN)) {return _node("IG_H", expr);}
+//Glides off u, high
+UG_H = expr:((a_H / a_HN) / (e_H / e_HN) / (i_H / i_HN) / (o_H / o_HN)) {return _node("UG_H", expr);}
+//Glides into i/u, high
+GV_H = expr:((a_H / a_HN) / (e_H / e_HN) / (o_H / o_HN)) {return _node("GV_H", expr);}
 // Finals
 F = expr:(p / b &voiced / t / d &voiced / k / g &voiced / l / n) {return _node("F", expr);}
 // Glides
 GL = expr:(j / w) {return _node("GL", expr);}
 // B Root Initial Clusters
-CL = expr:(z b / z d / z g / z l / z n / s p / s t / s k / s l / s n / q b / q d / q g / q l / q n / x p / x t / x k / x l / x n / b l / p l / g l / k l / v l / f l / d q / t x / d z / t s) {return _node("CL", expr);}
+CL = expr:(&voiced sibilant (&voiced stop / sonorant) / &unvoiced sibilant (&unvoiced stop / sonorant) / (!(t / d) stop / fricative) l / d &voiced sibilant / t &unvoiced sibilant) {return _node("CL", expr);}
 // Freeword-only consonants
-FWC = expr:(h / m / r) {return _node("FWC", expr);}
+FWC = expr:(h / m) {return _node("FWC", expr);}
 // Classic freeword finals
 FWF = expr:(f / v / s / z / x / q / r) {return _node("FWF", expr);}
 // Classic freeword clusters
-FWCL = expr:(!illegal_CL &(voiced voiced / unvoiced unvoiced / C (l / n)) FWF C) {return _node("FWCL", expr);}
+FWCL = expr:(!illegal_CL &(voiced voiced / unvoiced unvoiced / C sonorant) FWF C) {return _node("FWCL", expr);}
 // Illegal clusters
 illegal_CL = expr:(x s / s x / z q / q z) {return _node("illegal_CL", expr);}
+//Freeword triples
+CL3 = expr:(&(CL / FWCL) C (CL / !( . (sibilant / fricative)) FWCL) / F CL) {return _node("CL3", expr);}
 // Nasal vowels
 V_N = expr:(a_N / e_N / i_N / o_N / u_N) {return _node("V_N", expr);}
 // High marked vowels
@@ -334,9 +357,9 @@ V_HN = expr:(a_HN / e_HN / i_HN / o_HN / u_HN) {return _node("V_HN", expr);}
 // Low marked vowels
 V_L = expr:(a_L / e_L / i_L / o_L / u_L) {return _node("V_L", expr);}
 //Diphthongs
-D = expr:(i a / i e / i o / i u / u a / u e / u i / u o / a i / e i / o i / a u / e u / o u) {return _node("D", expr);}
+D = expr:(i IG / u UG / GV i / GV u / r (V / y) / (V / y) r !(V / y)) {return _node("D", expr);}
 // High  diphthongs
-HD = expr:(i (a_H / a_HN) / i (e_H / e_HN) / i (o_H / o_HN) / i (u_H / u_HN) / u (a_H / a_HN) / u (e_H / e_HN) / u (i_H / i_HN) / u (o_H / o_HN) / (a_H / a_HN) i / (e_H / e_HN) i / (o_H / o_HN) i / (a_H / a_HN) u / (e_H / e_HN) u / (o_H / o_HN) u) {return _node("HD", expr);}
+HD = expr:(i IG_H / u UG_H / GV_H i / GV_H u / r (V_H / V_HN / y_H / y_HN) / (V_H / V_HN / y_H / y_HN) r !ANY_V) {return _node("HD", expr);}
 
 //case fixing of letters
 
@@ -359,7 +382,7 @@ j = expr:([jJ]) {return ["j", _join(expr)];}
 w = expr:([wW]) {return ["w", _join(expr)];}
 
 m = expr:([mM]) {return ["m", _join(expr)];}
-r = expr:([rR]) {return ["r", _join(expr)];}
+r = expr:([rR] !r) {return ["r", _join(expr)];}
 h = expr:([hH]) {return ["h", _join(expr)];}
 
 a = expr:([aA]) {return ["a", _join(expr)];}

@@ -13,8 +13,9 @@ illocutions <- (discursive_illocution _? modal_illocution) / (modal_illocution _
 binder_phrase <- ( _? modifiers? binder_SS _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?
 tag_phrase <-    ( _? modifiers? tag_SS    _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS    _? clause _? KU_elidible) ( _? connective _? tag_phrase)?
 clause <- (fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?
-predicate <- (( _? modifiers? (serial / verb)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
-serial <- modifiers? _? verb (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verb (binder_phrase / tag_phrase)?)+
+predicate <- (( _? modifiers? (serial / verbal)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
+serial <- modifiers? _? verbal (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verbal (binder_phrase / tag_phrase)?)+
+verbal <- verb _? (connective _? verbal _? GU_elidible)?
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
@@ -52,9 +53,11 @@ morpheme <- root / suffix glottal?
 root <- C V !root_H F !ANY_V / CL V 
 root_H <- C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))
 root_L <- C V_L F !ANY_V / CL V_L
-freeword_start <- (FWC / ANY_C FWC / GL) (HD / ANY_H) &(ANY_C ANY_C? ANY_V)  /  ANY_C ANY_H &(ANY_C ANY_V / !F ANY_C ANY_C ANY_V)  /  glottal? (HD / ANY_H) &(ANY_C ANY_V / ANY_C ANY_C ANY_V) / ANY_C HD &(ANY_C ANY_V / ANY_C ANY_C ANY_V)
+
+freeword_start <- (FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)  /  ANY_C ANY_H &((!F CL3 / FWCL / sibilant m / ANY_C) ANY_V) /  glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)
 classic_freeword <- C (V / V_H) FWCL V F root*
-freeword <- freeword_start (ANY_C ANY_C? (HD / ANY_H))* ANY_C ANY_C? (D / V / y) r? F?   /   classic_freeword     # freeword classic(TM)
+freeword <- freeword_start ((CL3 / FWCL / CL / F C / ANY_C) (HD / ANY_H))* (CL3 / FWCL / CL / F C / sibilant m / ANY_C) (D / V / y) F?   /   classic_freeword     # freeword classic(TM)
+
 suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V
 pronoun <-  !(root / freeword) (n i e / n i o / t u i / b a !ANY_V / b i !ANY_V / t i !ANY_V / d i !ANY_V / d u !ANY_V / g i !ANY_V / g o !ANY_V / v i !ANY_V / v o !ANY_V / x e !ANY_V / l e !ANY_V / l i !ANY_V / n i !ANY_V)
 transmogrifier <- !(root / freeword) (h / glottal)? u !ANY_V
@@ -108,9 +111,9 @@ terminator <- SS_terminator / LS_terminator / DS_terminator
 # All letters
 ANY <- C / V / FWC / V_H / V_N / V_HN / y / y_H / y_HN / ['] / GL
 # All consonants
-ANY_C <- C / FWC / GL / glottal
+ANY_C <- C / FWC / GL / glottal / r
 # All vowels
-ANY_V <- V / V_H / V_N / V_HN / y / y_H / y_HN
+ANY_V <- V / V_H / V_N / V_HN / y / y_H / y_HN / r
 # All high tone
 ANY_H <- V_H / V_HN / y_H / y_HN
 # Consonants
@@ -119,24 +122,44 @@ C <- p / b / t / d / k / g / f / v / s / z / x / q / l / n
 voiced <- b / d / g / v / z / q
 # Unvoiced
 unvoiced <- p / t / k / f / s / x
+#Sibilant
+sibilant <- s / x / z / q
+#Other fricative
+fricative <- f / v
+#Stop
+stop <- p / t / k / b / d / g
+#Sonorant
+sonorant <- l / n
 # Vowels
 V <- a / e / i / o / u
-# Glide vowels
-GV <- u / i
+#Glides off i
+IG <- a / e / o / u
+#Glides off u
+UG <- a / e / i / o
+#Glides into i/u
+GV <- a / e / o
+#Glides off i, high
+IG_H <- (a_H / a_HN) / (e_H / e_HN) / (o_H / o_HN) / (u_H / u_HN)
+#Glides off u, high
+UG_H <- (a_H / a_HN) / (e_H / e_HN) / (i_H / i_HN) / (o_H / o_HN)
+#Glides into i/u, high
+GV_H <- (a_H / a_HN) / (e_H / e_HN) / (o_H / o_HN)
 # Finals
 F <- p / b &voiced / t / d &voiced / k / g &voiced / l / n
 # Glides
 GL <- j / w
 # B Root Initial Clusters
-CL <- z b / z d / z g / z l / z n / s p / s t / s k / s l / s n / q b / q d / q g / q l / q n / x p / x t / x k / x l / x n / b l / p l / g l / k l / v l / f l / d q / t x / d z / t s
+CL <- &voiced sibilant (&voiced stop / sonorant) / &unvoiced sibilant (&unvoiced stop / sonorant) / (!(t / d) stop / fricative) l / d &voiced sibilant / t &unvoiced sibilant
 # Freeword-only consonants
-FWC <- h / m / r
+FWC <- h / m
 # Classic freeword finals
 FWF <- f / v / s / z / x / q / r
 # Classic freeword clusters
-FWCL <- !illegal_CL &(voiced voiced / unvoiced unvoiced / C (l / n)) FWF C
+FWCL <- !illegal_CL &(voiced voiced / unvoiced unvoiced / C sonorant) FWF C
 # Illegal clusters
 illegal_CL <- x s / s x / z q / q z
+#Freeword triples
+CL3 <- &(CL / FWCL) C (CL / !( . (sibilant / fricative)) FWCL) / F CL
 # Nasal vowels
 V_N <- a_N / e_N / i_N / o_N / u_N
 # High marked vowels
@@ -146,9 +169,9 @@ V_HN <- a_HN / e_HN / i_HN / o_HN / u_HN
 # Low marked vowels
 V_L <- a_L / e_L / i_L / o_L / u_L
 #Diphthongs
-D <- i a / i e / i o / i u / u a / u e / u i / u o / a i / e i / o i / a u / e u / o u
+D <- i IG / u UG / GV i / GV u / r (V / y) / (V / y) r !(V / y)
 # High  diphthongs
-HD <- i (a_H / a_HN) / i (e_H / e_HN) / i (o_H / o_HN) / i (u_H / u_HN) / u (a_H / a_HN) / u (e_H / e_HN) / u (i_H / i_HN) / u (o_H / o_HN) / (a_H / a_HN) i / (e_H / e_HN) i / (o_H / o_HN) i / (a_H / a_HN) u / (e_H / e_HN) u / (o_H / o_HN) u
+HD <- i IG_H / u UG_H / GV_H i / GV_H u / r (V_H / V_HN / y_H / y_HN) / (V_H / V_HN / y_H / y_HN) r !ANY_V
 
 #case fixing of letters
 
@@ -171,7 +194,7 @@ j <- [jJ] #: LEAF
 w <- [wW] #: LEAF
 
 m <- [mM] #: LEAF
-r <- [rR] #: LEAF
+r <- [rR] !r #: LEAF
 h <- [hH] #: LEAF
 
 a <- [aA] #: LEAF
