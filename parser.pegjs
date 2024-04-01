@@ -203,7 +203,7 @@ tag_phrase = expr:(( _? modifiers? tag_SS _? adverbs? (term_nucleus / prepositio
 clause = expr:((fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?) {return _node("clause", expr);}
 predicate = expr:((( _? modifiers? (serial / verbal)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?) {return _node("predicate", expr);}
 serial = expr:(modifiers? _? verbal (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verbal (binder_phrase / tag_phrase)?)+) {return _node("serial", expr);}
-verbal = expr:(verb _? (connective _? verbal _? GU_elidible)?) {return _node("verbal", expr);}
+verbal = expr:(verb _? (connective _? predicate _? GU_elidible)?) {return _node("verbal", expr);}
 fragment = expr:((noun_terms / adverbs)+) {return _node("fragment", expr);}
 noun_terms = expr:((noun_term _?)+) {return _node("noun_terms", expr);}
 noun_term = expr:((subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)) {return _node("noun_term", expr);}
@@ -242,7 +242,7 @@ root = expr:(C V !root_H F !ANY_V / CL V) {return _node("root", expr);}
 root_H = expr:(C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))) {return _node("root_H", expr);}
 root_L = expr:(C V_L F !ANY_V / CL V_L) {return _node("root_L", expr);}
 
-freeword_start = expr:((FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C ANY_H &((!F CL3 / FWCL / sibilant m / ANY_C) ANY_V) / glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)) {return _node("freeword_start", expr);}
+freeword_start = expr:((FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C ANY_H &((!F (CL3 / CL) / FWCL / sibilant m / ANY_C) ANY_V) / glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)) {return _node("freeword_start", expr);}
 classic_freeword = expr:(C (V / V_H) FWCL V F root*) {return _node("classic_freeword", expr);}
 freeword = expr:(freeword_start ((CL3 / FWCL / CL / F C / ANY_C) (HD / ANY_H))* (CL3 / FWCL / CL / F C / sibilant m / ANY_C) (D / V / y) F? / classic_freeword) {return _node("freeword", expr);} // freeword classic(TM)
 

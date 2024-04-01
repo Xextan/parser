@@ -2123,7 +2123,7 @@ var parser = /*
               s6 = null;
             }
             if (s6 !== peg$FAILED) {
-              s7 = peg$parseverbal();
+              s7 = peg$parsepredicate();
               if (s7 !== peg$FAILED) {
                 s8 = peg$parse_();
                 if (s8 === peg$FAILED) {
@@ -6115,6 +6115,9 @@ var parser = /*
             }
             if (s7 !== peg$FAILED) {
               s8 = peg$parseCL3();
+              if (s8 === peg$FAILED) {
+                s8 = peg$parseCL();
+              }
               if (s8 !== peg$FAILED) {
                 s7 = [s7, s8];
                 s6 = s7;

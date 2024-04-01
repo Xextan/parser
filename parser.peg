@@ -15,7 +15,7 @@ tag_phrase <-    ( _? modifiers? tag_SS    _? adverbs? (term_nucleus / prepositi
 clause <- (fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?
 predicate <- (( _? modifiers? (serial / verbal)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
 serial <- modifiers? _? verbal (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verbal (binder_phrase / tag_phrase)?)+
-verbal <- verb _? (connective _? verbal _? GU_elidible)?
+verbal <- verb _? (connective _? predicate _? GU_elidible)?
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
@@ -54,7 +54,7 @@ root <- C V !root_H F !ANY_V / CL V
 root_H <- C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))
 root_L <- C V_L F !ANY_V / CL V_L
 
-freeword_start <- (FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)  /  ANY_C ANY_H &((!F CL3 / FWCL / sibilant m / ANY_C) ANY_V) /  glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)
+freeword_start <- (FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)  /  ANY_C ANY_H &((!F (CL3 / CL) / FWCL / sibilant m / ANY_C) ANY_V) /  glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)
 classic_freeword <- C (V / V_H) FWCL V F root*
 freeword <- freeword_start ((CL3 / FWCL / CL / F C / ANY_C) (HD / ANY_H))* (CL3 / FWCL / CL / F C / sibilant m / ANY_C) (D / V / y) F?   /   classic_freeword     # freeword classic(TM)
 
