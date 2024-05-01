@@ -216,7 +216,7 @@ preposition_term = expr:(_? modifiers? (preposition_SS _? (term_nucleus / modifi
 free_term = expr:(_? modifiers? ((pronoun / quote) _? tag_phrase? / (determiner_SS _?)+ (term_nucleus / GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?) {return _node("free_term", expr);}
 free_connective_term = expr:(_? connective _? (subject_term / object_term / dative_term / preposition_term / free_term)) {return _node("free_connective_term", expr);}
 
-adverbs = expr:((modifiers? adverb / adverb_phrase) (_? connective _? (modifiers? adverb / adverb_phrase)? _? )* / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)) {return _node("adverbs", expr);}
+adverbs = expr:((modifiers? adverb / adverb_phrase) (_? connective _? (modifiers? adverb / adverb_phrase) _? )* / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)) {return _node("adverbs", expr);}
 adverb_phrase = expr:(_? modifiers? (adverbializer_SS _? (term_nucleus / modifiers? GU_elidible) / adverbializer_LS _? clause _? KU_elidible / adverbializer_SS _? &illocution discourse)) {return _node("adverb_phrase", expr);}
 modifiers = expr:((modifier _?)+) {return _node("modifiers", expr);}
 quote = expr:(modifiers? _? quoter _? quotation_mark quoted_text quotation_mark ( _? tag_phrase)?) {return _node("quote", expr);}
@@ -282,7 +282,7 @@ adverb_suffix = expr:((n i u / l u a / d i e)) {return _node("adverb_suffix", ex
 connective = expr:(!(root / freeword) (k a i / q a !ANY_V / q e !ANY_V / q o !ANY_V / z e !ANY_V / z o !ANY_V)) {return _node("connective", expr);}
 binder_SS = expr:(!(root / freeword) (d o u / d o i / d e u / d e i / d a u / d a i / d o !ANY_V / d e !ANY_V / d a !ANY_V / p i !ANY_V)) {return _node("binder_SS", expr);}
 tag_SS = expr:(!(root / freeword) (k i !ANY_V / k e !ANY_V / p e !ANY_V)) {return _node("tag_SS", expr);}
-binder_LS = expr:(!(root / freeword) (d o_N !ANY_V / d e_N !ANY_V / d a_N !ANY_V / p i_N !ANY_V)) {return _node("binder_LS", expr);}
+binder_LS = expr:(!(root / freeword) (d o_N u / d o_N i / d e_N u / d e_N i / d a_N u / d a_N i / d o_N !ANY_V / d e_N !ANY_V / d a_N !ANY_V / p i_N !ANY_V)) {return _node("binder_LS", expr);}
 tag_LS = expr:(!(root / freeword) (k i_N !ANY_V / k e_N !ANY_V / p e_N !ANY_V)) {return _node("tag_LS", expr);}
 utility_predicate = expr:(b o !ANY_V / k a !ANY_V) {return _node("utility_predicate", expr);}
 quoter = expr:((l o u / l a u)) {return _node("quoter", expr);}
@@ -341,9 +341,9 @@ CL = expr:(&voiced sibilant (&voiced stop / sonorant) / &unvoiced sibilant (&unv
 // Freeword-only consonants
 FWC = expr:(h / m) {return _node("FWC", expr);}
 // Classic freeword finals
-FWF = expr:(f / v / s / z / x / q / r) {return _node("FWF", expr);}
+FWF = expr:(fricative / sibilant) {return _node("FWF", expr);}
 // Classic freeword clusters
-FWCL = expr:(!illegal_CL &(voiced voiced / unvoiced unvoiced / C sonorant) FWF C) {return _node("FWCL", expr);}
+FWCL = expr:(!illegal_CL &(voiced voiced / unvoiced unvoiced / . sonorant) FWF C) {return _node("FWCL", expr);}
 // Illegal clusters
 illegal_CL = expr:(x s / s x / z q / q z) {return _node("illegal_CL", expr);}
 //Freeword triples
