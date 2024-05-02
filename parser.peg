@@ -80,9 +80,10 @@ subject_marker_SS <- !(root / freeword) (t u o / t o i / t o u / (h / glottal)? 
 object_marker_SS <- !(root / freeword) (t u e / t e i / t e u / (h / glottal)? e i / (h / glottal)? e u / t e !ANY_V / (h / glottal)? e !ANY_V)
 dative_marker_SS <- !(root / freeword) (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !ANY_V / (h / glottal)? a !ANY_V)
 preposition_SS <- !(root / freeword) (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f o !ANY_V / z a !ANY_V)
-determiner_SS <- !(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)
+determiner_SS <- !(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / quantifier / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)
 possessive <- l i a / n i a / d u a / g u a / v u a / x u a
-numeral <- (s a u / z o u / x e u / q a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u !ANY_V / n u e / n u !ANY_V / n e !ANY_V)
+numeral <- (z o u / x e u / q a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / n u e / n u !ANY_V / n e !ANY_V / arabic_numeral)
+quantifier <- (s a u / s u a / s u e / s u i / s u o / s u !ANY_V)
 adverbializer_SS <- !(root / freeword) (f e !ANY_V / f i !ANY_V)
 
 illocution <- discursive_illocution / modal_illocution / z o i / q a i / q e i / q o i
@@ -245,6 +246,8 @@ hesitation <- y+
 punctuation <- [,.:;?!…'"-(){}]
 
 new_line <- "\n"
+
+arabic_numeral <- [1234567890] #: LEAF
 
 _ <- ([ ] / hesitation / punctuation / new_line)+ / end_of_input
 

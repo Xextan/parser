@@ -268,9 +268,10 @@ subject_marker_SS = expr:(!(root / freeword) (t u o / t o i / t o u / (h / glott
 object_marker_SS = expr:(!(root / freeword) (t u e / t e i / t e u / (h / glottal)? e i / (h / glottal)? e u / t e !ANY_V / (h / glottal)? e !ANY_V)) {return _node("object_marker_SS", expr);}
 dative_marker_SS = expr:(!(root / freeword) (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !ANY_V / (h / glottal)? a !ANY_V)) {return _node("dative_marker_SS", expr);}
 preposition_SS = expr:(!(root / freeword) (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f o !ANY_V / z a !ANY_V)) {return _node("preposition_SS", expr);}
-determiner_SS = expr:(!(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)) {return _node("determiner_SS", expr);}
+determiner_SS = expr:(!(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / quantifier / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)) {return _node("determiner_SS", expr);}
 possessive = expr:(l i a / n i a / d u a / g u a / v u a / x u a) {return _node("possessive", expr);}
-numeral = expr:((s a u / z o u / x e u / q a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / s u a / s u e / s u i / s u o / s u !ANY_V / n u e / n u !ANY_V / n e !ANY_V)) {return _node("numeral", expr);}
+numeral = expr:((z o u / x e u / q a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / n u e / n u !ANY_V / n e !ANY_V / arabic_numeral)) {return _node("numeral", expr);}
+quantifier = expr:((s a u / s u a / s u e / s u i / s u o / s u !ANY_V)) {return _node("quantifier", expr);}
 adverbializer_SS = expr:(!(root / freeword) (f e !ANY_V / f i !ANY_V)) {return _node("adverbializer_SS", expr);}
 
 illocution = expr:(discursive_illocution / modal_illocution / z o i / q a i / q e i / q o i) {return _node("illocution", expr);}
@@ -433,6 +434,8 @@ hesitation = expr:(y+) {return _node("hesitation", expr);}
 punctuation = [,.:;?!…'"_(){}]
 
 new_line = expr:("\n") {return _node("new_line", expr);}
+
+arabic_numeral = expr:([1234567890]) {return ["arabic_numeral", _join(expr)];}
 
 _ = expr:(([ ] / hesitation / punctuation / new_line)+ / end_of_input) {return _node("_", expr);}
 
