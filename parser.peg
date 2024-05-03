@@ -13,13 +13,13 @@ illocutions <- (discursive_illocution _? modal_illocution) / (modal_illocution _
 binder_phrase <- ( _? modifiers? binder_SS _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?
 tag_phrase <-    ( _? modifiers? tag_SS    _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS    _? clause _? KU_elidible) ( _? connective _? tag_phrase)?
 clause <- (fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?
-predicate <- (( _? modifiers? (serial / verbal)) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
-serial <- modifiers? _? verbal (binder_phrase / tag_phrase)? ( _? serial / _? modifiers? verbal (binder_phrase / tag_phrase)? / (binder_phrase / tag_phrase))+
-verbal <- verb _? (connective _? predicate _? GU_elidible)?
+predicate <- (( _? modifiers? (serial / verbal) (_? (tag_phrase / binder_phrase))*) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
+serial <- modifiers? _? verbal ( _? serial / _? modifiers? verbal)+
+verbal <- verb _? (binder_phrase / connective _? predicate _? GU_elidible)*
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
-term_nucleus <- _? adverbs? ((predicate / tag_phrase / binder_phrase) _? GU_elidible / free_term / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?)
+term_nucleus <- _? adverbs? ((predicate / tag_phrase / binder_phrase / modifiers? _? (pronoun / quote / verb_L) (_? tag_phrase)?) _? GU_elidible / free_term)
 predicate_term <- (_? modifiers?    transmogrifier _? (term_nucleus / modifiers? GU_elidible) / (U_elidible _? term_nucleus)) _? (connective _? predicate_term)?
 subject_term <-   _? modifiers? (subject_marker_SS _? (term_nucleus / modifiers? GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _?     subject_term)?
 object_term <-    _? modifiers? ( object_marker_SS _? (term_nucleus / modifiers? GU_elidible) /  object_marker_LS _? clause _? KU_elidible /  object_marker_SS _? &illocution discourse) _? (connective _?      object_term)?
@@ -44,7 +44,7 @@ XU          <- ALL_terminator
 
 verb_H <- compound_H / root_H
 verb_L <- compound_L / root_L
-verb <- (compound / root / utility_predicate / freeword / verb_H / trans_verb) _? binder_phrase?
+verb <- compound / root / utility_predicate / freeword / verb_H / trans_verb
 compound_H <- root_H morpheme+ 
 compound_L <- root_L morpheme+ 
 compound <- root morpheme+ 
