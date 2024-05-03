@@ -13,8 +13,8 @@ illocutions <- (discursive_illocution _? modal_illocution) / (modal_illocution _
 binder_phrase <- ( _? modifiers? binder_SS _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? binder_LS _? clause _? KU_elidible) ( _? connective _? binder_phrase)?
 tag_phrase <-    ( _? modifiers? tag_SS    _? adverbs? (term_nucleus / preposition_term / GU_elidible) / _? modifiers? tag_LS    _? clause _? KU_elidible) ( _? connective _? tag_phrase)?
 clause <- (fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?
-predicate <- (( _? modifiers? (serial / verbal) (_? (tag_phrase / binder_phrase))*) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
-serial <- modifiers? _? verbal ( _? serial / _? modifiers? verbal)+
+predicate <- ( _? modifiers? (serial / verbal) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
+serial <- modifiers? _? verbal (tag_phrase / binder_phrase)* ( _? serial / _? modifiers? verbal)+
 verbal <- verb _? (binder_phrase / connective _? predicate _? GU_elidible)*
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
