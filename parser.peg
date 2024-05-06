@@ -15,7 +15,7 @@ tag_phrase <-    ( _? modifiers? tag_SS    _? adverbs? (term_nucleus / prepositi
 clause <- (fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?
 predicate <- ( _? modifiers? (serial / verbal) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?
 serial <- modifiers? _? verbal (tag_phrase / binder_phrase)* ( _? serial / _? modifiers? verbal)+
-verbal <- verb _? (binder_phrase / connective _? predicate _? GU_elidible)*
+verbal <- verb _? binder_phrase* (_? connective _? verbal)?
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)
@@ -58,7 +58,7 @@ freeword_start <- (FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C 
 classic_freeword <- C (V / V_H) FWCL V F root*
 freeword <- freeword_start ((CL3 / FWCL / CL / F C / ANY_C) (HD / ANY_H))* (CL3 / FWCL / CL / F C / sibilant m / ANY_C) (D / V / y) F?   /   classic_freeword     # freeword classic(TM)
 
-suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V
+suffix <- x o !ANY_V / k o !ANY_V / z i !ANY_V / s a !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V
 pronoun <-  !(root / freeword) (n i e / n i o / t u i / b a !ANY_V / b i !ANY_V / t i !ANY_V / d i !ANY_V / d u !ANY_V / g i !ANY_V / g o !ANY_V / v i !ANY_V / v o !ANY_V / x e !ANY_V / l e !ANY_V / l i !ANY_V / n i !ANY_V)
 transmogrifier <- !(root / freeword) (h / glottal)? u !ANY_V
 case_marker <- case_marker_LS / case_marker_SS
