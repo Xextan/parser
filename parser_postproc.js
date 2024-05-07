@@ -149,7 +149,8 @@ function newer_postprocessor(
 						   "utility", "utility_N", "SS_terminator", "root_H", "quoter", "subject_marker_SS", "object_marker_SS",
    						   "dative_marker_SS", "preposition_LS", "determiner_LS", "subject_marker_LS", "object_marker_LS",
 						   "dative_marker_LS", "tag_LS", "binder_LS", "LS_terminator", "DS_terminator", "topic_marker", "illocution",
-						   "root_L", "compound_L", "trans_verb", "compound_H", "adverbializer_SS", "adverbializer_LS", "onomatopoeia"];
+						   "root_L", "compound_L", "trans_verb", "compound_H", "adverbializer_SS", "adverbializer_LS", "onomatopoeia",
+						   "root_N", "compound_N", "utility_N"];
     /** Building a node_action_for() function from the selected options **/
     if (with_morphology)
          var is_flattening_target = function (tree) { return false; };
