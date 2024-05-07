@@ -203,7 +203,7 @@ tag_phrase = expr:(( _? modifiers? tag_SS _? adverbs? (term_nucleus / prepositio
 clause = expr:((fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?) {return _node("clause", expr);}
 predicate = expr:(( _? modifiers? (serial / verbal) / _? !noun_term modifiers &(illocution / end_of_input)) tag_phrase? (_? connective _? predicate)?) {return _node("predicate", expr);}
 serial = expr:(modifiers? _? verbal (tag_phrase / binder_phrase)* ( _? serial / _? modifiers? verbal)+) {return _node("serial", expr);}
-verbal = expr:(verb _? binder_phrase* (_? connective _? verbal)?) {return _node("verbal", expr);}
+verbal = expr:((verb _? binder_phrase* / verb_N _? clause _? KU_elidible) (_? connective _? verbal)?) {return _node("verbal", expr);}
 fragment = expr:((noun_terms / adverbs)+) {return _node("fragment", expr);}
 noun_terms = expr:((noun_term _?)+) {return _node("noun_terms", expr);}
 noun_term = expr:((subject_term / object_term / dative_term / preposition_term / free_term / free_connective_term)) {return _node("noun_term", expr);}
@@ -216,7 +216,7 @@ preposition_term = expr:(_? modifiers? (preposition_SS _? (term_nucleus / modifi
 free_term = expr:(_? modifiers? ((pronoun / quote) _? tag_phrase? / (determiner_SS _?)+ (term_nucleus / GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?) {return _node("free_term", expr);}
 free_connective_term = expr:(_? connective _? (subject_term / object_term / dative_term / preposition_term / free_term)) {return _node("free_connective_term", expr);}
 
-adverbs = expr:((modifiers? adverb / adverb_phrase) (_? connective _? (modifiers? adverb / adverb_phrase) _? )* / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)) {return _node("adverbs", expr);}
+adverbs = expr:((modifiers? adverb / adverb_phrase / onomatopoeia) (_? connective _? (modifiers? adverb / adverb_phrase / onomatopoeia) _? )* / modifiers _? &(SS_terminator / connective? _? modifiers? illocution / KU_elidible / end_of_input)) {return _node("adverbs", expr);}
 adverb_phrase = expr:(_? modifiers? (adverbializer_SS _? (term_nucleus / modifiers? GU_elidible) / adverbializer_LS _? clause _? KU_elidible / adverbializer_SS _? &illocution discourse)) {return _node("adverb_phrase", expr);}
 modifiers = expr:((modifier _?)+) {return _node("modifiers", expr);}
 quote = expr:(modifiers? _? quoter _? quotation_mark quoted_text quotation_mark) {return _node("quote", expr);}
@@ -230,17 +230,21 @@ XU = expr:(ALL_terminator) {return _node("XU", expr);}
 
 // word level
 
+verb_N = expr:(compound_N / root_N / utility_N) {return _node("verb_N", expr);}
 verb_H = expr:(compound_H / root_H) {return _node("verb_H", expr);}
 verb_L = expr:(compound_L / root_L) {return _node("verb_L", expr);}
-verb = expr:(compound / root / utility_predicate / freeword / verb_H / trans_verb) {return _node("verb", expr);}
+verb = expr:(compound / root / utility / freeword / verb_H / trans_verb) {return _node("verb", expr);}
+compound_N = expr:(root_N morpheme+) {return _node("compound_N", expr);}
 compound_H = expr:(root_H morpheme+) {return _node("compound_H", expr);}
 compound_L = expr:(root_L morpheme+) {return _node("compound_L", expr);}
 compound = expr:(root morpheme+) {return _node("compound", expr);}
 trans_verb = expr:((((numeral / operator) _? )+ / possessive) suffix) {return _node("trans_verb", expr);}
 morpheme = expr:(root / suffix glottal?) {return _node("morpheme", expr);}
 root = expr:(C V !root_H F !ANY_V / CL V) {return _node("root", expr);}
+root_N = expr:(C V_HN !root_H F !ANY_V / CL V_HN) {return _node("root_N", expr);}
 root_H = expr:(C V_H F !ANY_V / CL V_H !(CL V F (C / _ / end_of_input))) {return _node("root_H", expr);}
 root_L = expr:(C V_L F !ANY_V / CL V_L) {return _node("root_L", expr);}
+onomatopoeia = expr:((CL3 / CL / ANY_C)? y ((CL3 / FWCL / CL / F C / ANY_C) y)* F?) {return _node("onomatopoeia", expr);}
 
 freeword_start = expr:((FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C ANY_H &((!F (CL3 / CL) / FWCL / sibilant m / ANY_C) ANY_V) / glottal? (HD / ANY_H) &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V) / ANY_C HD &((CL3 / FWCL / CL / F C / sibilant m / ANY_C) ANY_V)) {return _node("freeword_start", expr);}
 classic_freeword = expr:(C (V / V_H) FWCL V F root*) {return _node("classic_freeword", expr);}
@@ -260,7 +264,7 @@ subject_marker_LS = expr:(!(root / freeword) (t u o_N / t o_N i / t o_N u / (h /
 object_marker_LS = expr:(!(root / freeword) (t u e_N / t e_N i / t e_N u / (h / glottal)? e_N i / (h / glottal)? e_N u / t e_N !ANY_V / (h / glottal)? e_N !ANY_V)) {return _node("object_marker_LS", expr);}
 dative_marker_LS = expr:(!(root / freeword) (t u a_N / t a_N i / t a_N u / (h / glottal)? a_N i / (h / glottal)? a_N u / t a_N !ANY_V / (h / glottal)? a_N !ANY_V)) {return _node("dative_marker_LS", expr);}
 preposition_LS = expr:(!(root / freeword) (p i o_N / k i e_N / x u e_N / p a_N i / f a_N i / v e_N i / v o_N i / x o_N i / p a_N u / p e_N u / k o_N u / f a_N u / x a_N u / n a_N u / n e_N u / f o_N !ANY_V / z a_N !ANY_V)) {return _node("preposition_LS", expr);}
-determiner_LS = expr:(!(root / freeword) (b a_N u / p o_N !ANY_V / q i_N !ANY_V / q u_N !ANY_V / l a_N !ANY_V / l o_N !ANY_V / l u_N !ANY_V / t u_N !ANY_V)) {return _node("determiner_LS", expr);}
+determiner_LS = expr:(!(root / freeword) (b a_N u /q i_N !ANY_V / l a_N !ANY_V / l o_N !ANY_V / l u_N !ANY_V / t u_N !ANY_V)) {return _node("determiner_LS", expr);}
 adverbializer_LS = expr:(!(root / freeword) (f e_N !ANY_V / f i_N !ANY_V)) {return _node("adverbializer_LS", expr);}
 
 case_marker_SS = expr:(subject_marker_SS / object_marker_SS / dative_marker_SS) {return _node("case_marker_SS", expr);}
@@ -268,7 +272,7 @@ subject_marker_SS = expr:(!(root / freeword) (t u o / t o i / t o u / (h / glott
 object_marker_SS = expr:(!(root / freeword) (t u e / t e i / t e u / (h / glottal)? e i / (h / glottal)? e u / t e !ANY_V / (h / glottal)? e !ANY_V)) {return _node("object_marker_SS", expr);}
 dative_marker_SS = expr:(!(root / freeword) (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !ANY_V / (h / glottal)? a !ANY_V)) {return _node("dative_marker_SS", expr);}
 preposition_SS = expr:(!(root / freeword) (p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f o !ANY_V / z a !ANY_V)) {return _node("preposition_SS", expr);}
-determiner_SS = expr:(!(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / quantifier / p o !ANY_V / q i !ANY_V / q u !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)) {return _node("determiner_SS", expr);}
+determiner_SS = expr:(!(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / quantifier / q i !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V)) {return _node("determiner_SS", expr);}
 possessive = expr:(l i a / n i a / d u a / g u a / v u a / x u a) {return _node("possessive", expr);}
 numeral = expr:((z o u / x e u / q a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / n u e / n u !ANY_V / n e !ANY_V / arabic_numeral)) {return _node("numeral", expr);}
 quantifier = expr:((s a u / s u a / s u e / s u i / s u o / s u !ANY_V)) {return _node("quantifier", expr);}
@@ -285,7 +289,8 @@ binder_SS = expr:(!(root / freeword) (d o u / d o i / d e u / d e i / d a u / d 
 tag_SS = expr:(!(root / freeword) (k i !ANY_V / k e !ANY_V / p e !ANY_V)) {return _node("tag_SS", expr);}
 binder_LS = expr:(!(root / freeword) (d o_N u / d o_N i / d e_N u / d e_N i / d a_N u / d a_N i / d o_N !ANY_V / d e_N !ANY_V / d a_N !ANY_V / p i_N !ANY_V)) {return _node("binder_LS", expr);}
 tag_LS = expr:(!(root / freeword) (k i_N !ANY_V / k e_N !ANY_V / p e_N !ANY_V)) {return _node("tag_LS", expr);}
-utility_predicate = expr:(b o !ANY_V / k a !ANY_V) {return _node("utility_predicate", expr);}
+utility = expr:(b o !ANY_V / k a !ANY_V / p o !ANY_V / q u !ANY_V) {return _node("utility", expr);}
+utility_N = expr:(b o_N !ANY_V / k a_N !ANY_V / p o_N !ANY_V / q u_N !ANY_V) {return _node("utility_N", expr);}
 quoter = expr:((l o u / l a u)) {return _node("quoter", expr);}
 operator = expr:(!(root / freeword) (x i !ANY_V / p u !ANY_V)) {return _node("operator", expr);}
 
@@ -429,15 +434,13 @@ o_HN = expr:([ôÔ]) {return ["o_HN", _join(expr)];}
 u_HN = expr:([ûÛ]) {return ["u_HN", _join(expr)];}
 y_HN = expr:([ŷŶ]) {return ["y_HN", _join(expr)];}
 
-hesitation = expr:(y+) {return _node("hesitation", expr);}
-
 punctuation = [,.:;?!…'"_(){}]
 
 new_line = expr:("\n") {return _node("new_line", expr);}
 
 arabic_numeral = expr:([1234567890]) {return ["arabic_numeral", _join(expr)];}
 
-_ = expr:(([ ] / hesitation / punctuation / new_line)+ / end_of_input) {return _node("_", expr);}
+_ = expr:(([ ] / punctuation / new_line)+ / end_of_input) {return _node("_", expr);}
 
 quotation_mark = expr:([~]+) {return ["quotation_mark", _join(expr)];}
 
