@@ -15,7 +15,7 @@ tag_phrase <-    ( _? modifiers? tag_SS    _? adverbs? (term_nucleus / GU_elidib
 clause <- (fragment (XU _?)?)* (predicate_term fragment?)+ (_? connective _? clause)?
 predicate <- ( _? modifiers? (serial / verbal)) tag_phrase? (_? connective _? predicate)?
 serial <- modifiers? _? (verbal / tag_phrase / binder_phrase) (tag_phrase / binder_phrase)* ( _? serial / _? modifiers? verbal)+
-verbal <- (verb _? binder_phrase* / verb_N _? clause _? KU_elidible) (_? connective _? verbal)?
+verbal <- (verb_modifier _?)? (verb _? binder_phrase* / verb_N _? clause _? KU_elidible) (_? connective _? verbal)?
 fragment <- (noun_terms / adverbs)+
 noun_terms <- (noun_term _?)+
 noun_term <- (subject_term / object_term / dative_term / free_term / free_connective_term / free_noun / free_connective_noun)
@@ -94,7 +94,8 @@ quantifier <- (s a u / s u a / s u e / s u i / s u o / s u !ANY_V)
 illocution <- discursive_illocution / modal_illocution / z o i / q a i / q e i / q o i
 discursive_illocution <- (h / glottal)? i !ANY_V / j e / j u
 modal_illocution <- j a / j o / j i
-modifier <- !(root / freeword) (f e i / s a i / s e i / s o i / b u !ANY_V / g a !ANY_V / g e !ANY_V / s o !ANY_V / n o !ANY_V)
+modifier <- !(root / freeword) (f e i / s a i / s e i / s o i / b u !ANY_V / s o !ANY_V / n o !ANY_V)
+verb_modifier <- !(root / freeword) (g a !ANY_V / g e !ANY_V) 
 adverb <- !(root / freeword) (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / f i a / f i e / f i o / f i u / w a / w e / w i / w o / w u / n a !ANY_V / x a !ANY_V / f a !ANY_V / p a !ANY_V) adverb_suffix?
 adverb_suffix <- (n i u / l u a / d i e)
 connective <- !(root / freeword) (k a i / q a !ANY_V / q e !ANY_V / q o !ANY_V / z e !ANY_V / z o !ANY_V)
