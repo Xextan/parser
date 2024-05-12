@@ -1786,9 +1786,11 @@ var parser = /*
         s2 = peg$FAILED;
       }
       if (s2 !== peg$FAILED) {
-        s3 = peg$parsetag_phrase();
-        if (s3 === peg$FAILED) {
-          s3 = null;
+        s3 = [];
+        s4 = peg$parsetag_phrase();
+        while (s4 !== peg$FAILED) {
+          s3.push(s4);
+          s4 = peg$parsetag_phrase();
         }
         if (s3 !== peg$FAILED) {
           s4 = peg$currPos;
@@ -2503,7 +2505,7 @@ var parser = /*
     }
 
     function peg$parseterm_nucleus() {
-      var s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
+      var s0, s1, s2, s3, s4, s5, s6, s7, s8, s9;
 
       var key    = peg$currPos * 186 + 15,
           cached = peg$resultsCache[key];
@@ -2546,26 +2548,11 @@ var parser = /*
                       s7 = peg$parseverb_L();
                     }
                     if (s7 !== peg$FAILED) {
-                      s8 = peg$currPos;
-                      s9 = peg$parse_();
-                      if (s9 === peg$FAILED) {
-                        s9 = null;
-                      }
-                      if (s9 !== peg$FAILED) {
-                        s10 = peg$parsetag_phrase();
-                        if (s10 !== peg$FAILED) {
-                          s9 = [s9, s10];
-                          s8 = s9;
-                        } else {
-                          peg$currPos = s8;
-                          s8 = peg$FAILED;
-                        }
-                      } else {
-                        peg$currPos = s8;
-                        s8 = peg$FAILED;
-                      }
-                      if (s8 === peg$FAILED) {
-                        s8 = null;
+                      s8 = [];
+                      s9 = peg$parsetag_phrase();
+                      while (s9 !== peg$FAILED) {
+                        s8.push(s9);
+                        s9 = peg$parsetag_phrase();
                       }
                       if (s8 !== peg$FAILED) {
                         s6 = [s6, s7, s8];
@@ -3847,9 +3834,11 @@ var parser = /*
           s3 = null;
         }
         if (s3 !== peg$FAILED) {
-          s4 = peg$parsetag_phrase();
-          if (s4 === peg$FAILED) {
-            s4 = null;
+          s4 = [];
+          s5 = peg$parsetag_phrase();
+          while (s5 !== peg$FAILED) {
+            s4.push(s5);
+            s5 = peg$parsetag_phrase();
           }
           if (s4 !== peg$FAILED) {
             s5 = peg$currPos;
