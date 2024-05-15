@@ -216,7 +216,7 @@ object_term = expr:(_? modifiers? ( object_marker_SS _? (term_nucleus / adverbs?
 dative_term = expr:(_? modifiers? ( dative_marker_SS _? (term_nucleus / adverbs? GU_elidible) / dative_marker_LS _? clause _? KU_elidible / dative_marker_SS _? &illocution discourse) _? (connective _? dative_term)?) {return _node("dative_term", expr);}
 free_term = expr:(_? modifiers? ((determiner_SS _?)+ (term_nucleus / adverbs? GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?) {return _node("free_term", expr);}
 free_connective_term = expr:(_? connective _? (subject_term / object_term / dative_term / free_term)) {return _node("free_connective_term", expr);}
-free_noun = expr:((pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?) {return _node("free_noun", expr);}
+free_noun = expr:(SU_elidible (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?) {return _node("free_noun", expr);}
 free_connective_noun = expr:(_? connective _? free_noun) {return _node("free_connective_noun", expr);}
 
 adverbs = expr:((adverbial _?)+ / trans_adverb) {return _node("adverbs", expr);}
@@ -228,6 +228,7 @@ quote = expr:(modifiers? _? quoter _? quotation_mark quoted_text quotation_mark)
 quoted_text = expr:((!quotation_mark . )+) {return ["quoted_text", _join(expr)];}
 
 U_elidible = expr:(&( _? term_nucleus)) {return (expr === "" || !expr) ? ["U"] : _node_empty("U_elidible", expr);}
+SU_elidible = expr:(&( _? (pronoun / quote))) {return (expr === "" || !expr) ? ["SU"] : _node_empty("SU_elidible", expr);}
 GU_elidible = expr:(SS_terminator / &((_? adverbs _?)? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? predicate_term / connective _? modifiers? adverbial / connective? _? modifiers? quoter / connective? _? modifiers? case_marker / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / connective _? (tag / binder) / LS_terminator / DS_terminator / ALL_terminator / end_of_input))) {return (expr === "" || !expr) ? ["GU"] : _node_empty("GU_elidible", expr);}
 KU_elidible = expr:(LS_terminator / &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)) {return (expr === "" || !expr) ? ["KU"] : _node_empty("KU_elidible", expr);}
 VU_elidible = expr:(DS_terminator / &end_of_input) {return (expr === "" || !expr) ? ["VU"] : _node_empty("VU_elidible", expr);}
