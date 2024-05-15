@@ -2543,9 +2543,12 @@ var parser = /*
                     s6 = null;
                   }
                   if (s6 !== peg$FAILED) {
-                    s7 = peg$parsefree_nominal();
+                    s7 = peg$parsepronoun();
                     if (s7 === peg$FAILED) {
-                      s7 = peg$parseverb_L();
+                      s7 = peg$parsequote();
+                      if (s7 === peg$FAILED) {
+                        s7 = peg$parseverb_L();
+                      }
                     }
                     if (s7 !== peg$FAILED) {
                       s8 = [];

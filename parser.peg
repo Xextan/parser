@@ -21,7 +21,7 @@ noun_terms <- (noun_term _?)+
 noun_term <- subject_term / object_term / dative_term / free_nominal / connective_nominal
 free_nominal <- (free_term / free_noun) (_? connective _? free_nominal)?
 connective_nominal <- (free_connective_noun / free_connective_term) (_? connective _? connective_nominal)?
-term_nucleus <- _? adverbs? (free_term / (predicate / tag_phrase / binder_phrase / modifiers? (free_nominal / verb_L) tag_phrase*) _? GU_elidible)
+term_nucleus <- _? adverbs? (free_term / (predicate / tag_phrase / binder_phrase / modifiers? (pronoun / quote / verb_L) tag_phrase*) _? GU_elidible)
 predicate_term <- (_? modifiers?    transmogrifier _? (term_nucleus / adverbs? GU_elidible) / (U_elidible _? (predicate / tag_phrase / binder_phrase) _? GU_elidible)) _? (connective _? predicate_term)?
 subject_term <-   _? modifiers? (subject_marker_SS _? (term_nucleus / adverbs? GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _?     subject_term)?
 object_term <-    _? modifiers? ( object_marker_SS _? (term_nucleus / adverbs? GU_elidible) /  object_marker_LS _? clause _? KU_elidible /  object_marker_SS _? &illocution discourse) _? (connective _?      object_term)?
