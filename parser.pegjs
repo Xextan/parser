@@ -210,13 +210,13 @@ noun_term = expr:(subject_term / object_term / dative_term / free_nominal / conn
 free_nominal = expr:((free_term / free_noun) (_? connective _? free_nominal)?) {return _node("free_nominal", expr);}
 connective_nominal = expr:((free_connective_noun / free_connective_term) (_? connective _? connective_nominal)?) {return _node("connective_nominal", expr);}
 term_nucleus = expr:(_? adverbs? (free_term / (predicate / tag_phrase / binder_phrase / modifiers? (free_nominal / verb_L) tag_phrase*) _? GU_elidible)) {return _node("term_nucleus", expr);}
-predicate_term = expr:((_? modifiers? transmogrifier _? (term_nucleus / adverbs? GU_elidible) / (U_elidible _? predicate _? GU_elidible)) _? (connective _? predicate_term)?) {return _node("predicate_term", expr);}
+predicate_term = expr:((_? modifiers? transmogrifier _? (term_nucleus / adverbs? GU_elidible) / (U_elidible _? (predicate / tag_phrase / binder_phrase) _? GU_elidible)) _? (connective _? predicate_term)?) {return _node("predicate_term", expr);}
 subject_term = expr:(_? modifiers? (subject_marker_SS _? (term_nucleus / adverbs? GU_elidible) / subject_marker_LS _? clause _? KU_elidible / subject_marker_SS _? &illocution discourse) _? (connective _? subject_term)?) {return _node("subject_term", expr);}
 object_term = expr:(_? modifiers? ( object_marker_SS _? (term_nucleus / adverbs? GU_elidible) / object_marker_LS _? clause _? KU_elidible / object_marker_SS _? &illocution discourse) _? (connective _? object_term)?) {return _node("object_term", expr);}
 dative_term = expr:(_? modifiers? ( dative_marker_SS _? (term_nucleus / adverbs? GU_elidible) / dative_marker_LS _? clause _? KU_elidible / dative_marker_SS _? &illocution discourse) _? (connective _? dative_term)?) {return _node("dative_term", expr);}
 free_term = expr:(_? modifiers? ((determiner_SS _?)+ (term_nucleus / adverbs? GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?) {return _node("free_term", expr);}
 free_connective_term = expr:(_? connective _? (subject_term / object_term / dative_term / free_term)) {return _node("free_connective_term", expr);}
-free_noun = expr:((pronoun / quote) _? tag_phrase* (_? connective _? free_noun)?) {return _node("free_noun", expr);}
+free_noun = expr:((pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?) {return _node("free_noun", expr);}
 free_connective_noun = expr:(_? connective _? free_noun) {return _node("free_connective_noun", expr);}
 
 adverbs = expr:((adverbial _?)+ / trans_adverb) {return _node("adverbs", expr);}
