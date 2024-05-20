@@ -23,7 +23,7 @@ free_nominal <- (free_term / free_noun) (_? connective _? free_nominal)?
 connective_nominal <- (free_connective_noun / free_connective_term) (_? connective _? free_nominal)?
 term_nucleus <- _? ((preposition_term / adverbs) _?)* (free_term / (predicate / tag_phrase / binder_phrase / modifiers? (pronoun / quote / verb_L) tag_phrase*) _? GU_elidible)
 predicate_term <- (_? modifiers?    transmogrifier _? (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / (U_elidible _? (predicate / tag_phrase / binder_phrase) _? GU_elidible)) _? (connective _? predicate_term)?
-preposition_term <-   _? modifiers? (preposition_SS _? (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / preposition_LS _? clause _? KU_elidible / preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?
+preposition_term <-   _? modifiers? (verb_modifier _?)? (preposition_SS _? (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / preposition_LS _? clause _? KU_elidible / preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?
 free_term <-      _? modifiers? ((determiner_SS _?)+  (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?
 free_connective_term <- _? connective _? (preposition_term / free_term)
 free_noun <- SU_elidible (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?
@@ -82,14 +82,14 @@ binder <- binder_SS / binder_LS
 subject_marker_LS <- !(root / freeword) (t u o_N / t o_N i / t o_N u / (h / glottal)? o_N i / (h / glottal)? o_N u / t o_N !ANY_V / (h / glottal)? o_N !ANY_V)
 object_marker_LS <- !(root / freeword) (t u e_N / t e_N i / t e_N u / (h / glottal)? e_N i / (h / glottal)? e_N u / t e_N !ANY_V / (h / glottal)? e_N !ANY_V)
 dative_marker_LS <- !(root / freeword) (t u a_N / t a_N i / t a_N u / (h / glottal)? a_N i / (h / glottal)? a_N u / t a_N !ANY_V / (h / glottal)? a_N !ANY_V)
-preposition_LS <- !(root / freeword) (subject_marker_LS / object_marker_LS / dative_marker_LS / p i o_N / k i e_N / x u e_N / p a_N i / f a_N i / v e_N i / v o_N i / x o_N i / p a_N u / p e_N u / k o_N u / f a_N u / x a_N u / n a_N u / n e_N u / f o_N !ANY_V / z a_N !ANY_V / f e_N !ANY_V / f i_N !ANY_V)
-determiner_LS <- !(root / freeword) (b a_N u /q i_N !ANY_V / l a_N !ANY_V / l o_N !ANY_V / l u_N !ANY_V / t u_N !ANY_V / p o_N !ANY_V / q u_N !ANY_V)
+preposition_LS <- !(root / freeword) (subject_marker_LS / object_marker_LS / dative_marker_LS / p i o_N / k i e_N / x u e_N / p a_N i / f a_N i / v e_N i / v o_N i / x o_N i / p a_N u / p e_N u / k o_N u / f a_N u / x a_N u / n a_N u / n e_N u / g e_N i /  f o_N !ANY_V / z a_N !ANY_V / f e_N !ANY_V / f i_N !ANY_V)
+determiner_LS <- !(root / freeword) (b a_N u / k a_N u / l a_N i / q i_N !ANY_V / l a_N !ANY_V / l o_N !ANY_V / l u_N !ANY_V / t u_N !ANY_V / p o_N !ANY_V / q u_N !ANY_V)
 
 subject_marker_SS <- !(root / freeword) (t u o / t o i / t o u / (h / glottal)? o i / (h / glottal)? o u / t o !ANY_V / (h / glottal)? o !ANY_V)
 object_marker_SS <- !(root / freeword) (t u e / t e i / t e u / (h / glottal)? e i / (h / glottal)? e u / t e !ANY_V / (h / glottal)? e !ANY_V)
 dative_marker_SS <- !(root / freeword) (t u a / t a i / t a u / (h / glottal)? a i / (h / glottal)? a u / t a !ANY_V / (h / glottal)? a !ANY_V)
-preposition_SS <- !(root / freeword) (subject_marker_SS / object_marker_SS / dative_marker_SS / p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / f o !ANY_V / z a !ANY_V / f e !ANY_V / f i !ANY_V)
-determiner_SS <- !(root / freeword) (k a u / b a u / possessive / ((numeral / operator) _? )+ / quantifier / q i !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V / p o !ANY_V / q u !ANY_V)
+preposition_SS <- !(root / freeword) (subject_marker_SS / object_marker_SS / dative_marker_SS / p i o / k i e / x u e / p a i / f a i / v e i / v o i / x o i / p a u / p e u / k o u / f a u / x a u / n a u / n e u / g e i / f o !ANY_V / z a !ANY_V / f e !ANY_V / f i !ANY_V)
+determiner_SS <- !(root / freeword) (k a u / b a u / l a i / possessive / ((numeral / operator) _? )+ / quantifier / q i !ANY_V / l a !ANY_V / l o !ANY_V / l u !ANY_V / t u !ANY_V / p o !ANY_V / q u !ANY_V)
 possessive <- l i a / n i a / d u a / g u a / v u a / x u a
 numeral <- (z o u / x e u / q a u / d u o / t i e / k u a / p e i / l i o / x a i / b u i / g i u / n u e / n u !ANY_V / n e !ANY_V / arabic_numeral)
 quantifier <- (s a u / s u a / s u e / s u i / s u o / s u !ANY_V)
@@ -99,9 +99,9 @@ discursive_illocution <- (h / glottal)? i !ANY_V / j e / j u
 modal_illocution <- j a / j o / j i
 modifier <- !(root / freeword) (f e i / s a i / s e i / s o i / b u !ANY_V / s o !ANY_V / n o !ANY_V)
 verb_modifier <- !(root / freeword) (g a !ANY_V / g e !ANY_V) 
-adverb <- !(root / freeword) (q e u / v o u / n o i / n a i / l a i / z e i / k e i / q u o / f i a / f i e / f i o / f i u / w a / w e / w i / w o / w u / n a !ANY_V / x a !ANY_V / f a !ANY_V / p a !ANY_V) adverb_suffix?
+adverb <- !(root / freeword) (q e u / v o u / v a i / n o i / n a i / z e i / k e i / q u o / x o u / f o u / f i a / f i e / f i o / f i u / w a / w e / w i / w o / w u / n a !ANY_V / x a !ANY_V / f a !ANY_V / p a !ANY_V) adverb_suffix?
 adverb_suffix <- (n i u / l u a / d i e)
-connective <- !(root / freeword) (k a i / q a !ANY_V / q e !ANY_V / q o !ANY_V / z e !ANY_V / z o !ANY_V)
+connective <- !(root / freeword) (p o i / q a !ANY_V / q e !ANY_V / q o !ANY_V / z e !ANY_V / z o !ANY_V)
 binder_SS <- !(root / freeword) (d o u / d o i / d e u / d e i / d a u / d a i / d o !ANY_V / d e !ANY_V / d a !ANY_V / p i !ANY_V)
 tag_SS <- !(root / freeword) (k i !ANY_V / k e !ANY_V / p e !ANY_V)
 binder_LS <- !(root / freeword) (d o_N u / d o_N i / d e_N u / d e_N i / d a_N u / d a_N i / d o_N !ANY_V / d e_N !ANY_V / d a_N !ANY_V / p i_N !ANY_V)
