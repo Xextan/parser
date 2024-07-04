@@ -3,6 +3,7 @@
 		return "ERROR: Wrong input type.";
 	input = input.replace(/’/gm,"'");
 	input = input.replace(/\(|\)|«|»|‹|›|—|:/gm,"");
+	input = input.replace(/-/gm," ");
 	return input;
 }
 
