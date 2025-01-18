@@ -30,8 +30,9 @@ free_connective_term <- _? connective _? (preposition_term / free_term)
 free_noun <- SU_elidible modifiers? (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?
 free_connective_noun <- _? connective _? free_noun
 
-adverbs <- (adverbial _?)+ / trans_adverb
-adverbial <- modifiers? (adverb_compound / adverb / onomatopoeia) (_? connective _? adverbial)?
+adverbs <- (adverb_phrase _?)+ / trans_adverb
+adverb_phrase <- modifiers? adverbial (_? connective _? adverb_phrase)?
+adverbial <- adverb_compound / adverb / onomatopoeia
 trans_adverb <- _? modifiers &(connective? _? modifiers? illocution / SS_terminator / LS_terminator / DS_terminator / XU / end_of_input)
 modifiers <- (modifier _?)+
 quote <- modifiers? _? quoter _? quotation_mark quoted_text quotation_mark
@@ -39,7 +40,7 @@ quoted_text <- (!quotation_mark . )+ #: LEAF
 
 U_elidible  <- transmogrifier? #&( _? term_nucleus)
 SU_elidible <- ( s u )? #&( _? (pronoun / quote)) 
-GU_elidible <- SS_terminator? #/ &((_? adverbs _?)? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? predicate_term / connective _? modifiers? adverbial / connective? _? modifiers? quoter / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / connective _? (tag / binder) / LS_terminator / DS_terminator / ALL_terminator / end_of_input))
+GU_elidible <- SS_terminator? #/ &((_? adverbs _?)? (connective? _? modifiers? illocution / connective? _? modifiers? pronoun / connective? _? modifiers? predicate_term / connective _? modifiers? adverb_phrase / connective? _? modifiers? quoter / connective? _? modifiers? preposition / connective? _? modifiers? determiner / connective? _? modifiers? transmogrifier / connective _? (tag / binder) / LS_terminator / DS_terminator / ALL_terminator / end_of_input))
 KU_elidible <- LS_terminator? #/ &(connective? _? modifiers? illocution / DS_terminator / XU / end_of_input)
 VU_elidible <- DS_terminator? #/ &end_of_input
 XU          <- ALL_terminator
