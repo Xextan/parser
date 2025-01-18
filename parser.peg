@@ -26,7 +26,7 @@ predicate_term <- (_? modifiers?    transmogrifier _? (term_nucleus / ((preposit
 preposition_term <-   _? modifiers? (verb_modifier _?)? (preposition_SS _? (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / preposition_LS _? clause _? KU_elidible / preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?
 free_term <-      _? modifiers? ((determiner_SS _?)+  (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?
 free_connective_term <- _? connective _? (preposition_term / free_term)
-free_noun <- SU_elidible (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?
+free_noun <- SU_elidible modifiers? (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?
 free_connective_noun <- _? connective _? free_noun
 
 adverbs <- (adverbial _?)+ / trans_adverb

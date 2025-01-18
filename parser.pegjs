@@ -214,7 +214,7 @@ predicate_term = expr:((_? modifiers? transmogrifier _? (term_nucleus / ((prepos
 preposition_term = expr:(_? modifiers? (verb_modifier _?)? (preposition_SS _? (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / preposition_LS _? clause _? KU_elidible / preposition_SS _? &illocution discourse) _? (connective _? preposition_term)?) {return _node("preposition_term", expr);}
 free_term = expr:(_? modifiers? ((determiner_SS _?)+ (term_nucleus / ((preposition_term / adverbs) _?)* GU_elidible) / (determiner_SS _?)* determiner_LS _? clause _? KU_elidible / determiner_SS _? &illocution discourse) _? (connective _? free_term)?) {return _node("free_term", expr);}
 free_connective_term = expr:(_? connective _? (preposition_term / free_term)) {return _node("free_connective_term", expr);}
-free_noun = expr:(SU_elidible (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?) {return _node("free_noun", expr);}
+free_noun = expr:(SU_elidible modifiers? (pronoun / quote) _? tag_phrase* _? GU_elidible (_? connective _? free_noun)?) {return _node("free_noun", expr);}
 free_connective_noun = expr:(_? connective _? free_noun) {return _node("free_connective_noun", expr);}
 
 adverbs = expr:((adverbial _?)+ / trans_adverb) {return _node("adverbs", expr);}
