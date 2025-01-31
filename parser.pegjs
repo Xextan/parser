@@ -261,7 +261,7 @@ freeword_start = expr:((FWC / sibilant m / GL) (HD / ANY_H) &((CL3 / FWCL / CL /
 classic_freeword = expr:(C (V / V_H) FWCL V F root*) {return _node("classic_freeword", expr);}
 freeword = expr:(freeword_start ((CL3 / FWCL / CL / F C / ANY_C) (HD / ANY_H))* (CL3 / FWCL / CL / F C / sibilant m / ANY_C) (D / V / y) F? / classic_freeword) {return _node("freeword", expr);} // freeword classic(TM)
 
-suffix = expr:(x o !ANY_V / k o !ANY_V / z i !ANY_V / s a !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V) {return _node("suffix", expr);}
+suffix = expr:(x o !ANY_V / k o !ANY_V / z i !ANY_V / s a !ANY_V / s e !ANY_V / s i !ANY_V / f u !ANY_V / z u !ANY_V) {return _node("suffix", expr);}
 pronoun = expr:(!(root / freeword) (n i e / n i o / t u i / b a !ANY_V / b i !ANY_V / t i !ANY_V / d i !ANY_V / d u !ANY_V / g i !ANY_V / g o !ANY_V / v i !ANY_V / v o !ANY_V / x e !ANY_V / l e !ANY_V / l i !ANY_V / n i !ANY_V)) {return _node("pronoun", expr);}
 transmogrifier = expr:(!(root / freeword) (h / glottal)? u !ANY_V) {return _node("transmogrifier", expr);}
 preposition = expr:(preposition_LS / preposition_SS) {return _node("preposition", expr);}

@@ -6340,6 +6340,38 @@ var parser = /*
                     peg$currPos = s1;
                     s1 = peg$FAILED;
                   }
+                  if (s1 === peg$FAILED) {
+                    s1 = peg$currPos;
+                    s2 = peg$parsez();
+                    if (s2 !== peg$FAILED) {
+                      s3 = peg$parseu();
+                      if (s3 !== peg$FAILED) {
+                        s4 = peg$currPos;
+                        peg$silentFails++;
+                        s5 = peg$parseANY_V();
+                        peg$silentFails--;
+                        if (s5 === peg$FAILED) {
+                          s4 = void 0;
+                        } else {
+                          peg$currPos = s4;
+                          s4 = peg$FAILED;
+                        }
+                        if (s4 !== peg$FAILED) {
+                          s2 = [s2, s3, s4];
+                          s1 = s2;
+                        } else {
+                          peg$currPos = s1;
+                          s1 = peg$FAILED;
+                        }
+                      } else {
+                        peg$currPos = s1;
+                        s1 = peg$FAILED;
+                      }
+                    } else {
+                      peg$currPos = s1;
+                      s1 = peg$FAILED;
+                    }
+                  }
                 }
               }
             }
